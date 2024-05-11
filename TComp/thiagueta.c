@@ -45,7 +45,7 @@ char *verif_ident(FILE *arq){
 
 int main(int argc, char **argv){
 
-
+printf("aaaaaaaaaaaaa");
 
 
 
