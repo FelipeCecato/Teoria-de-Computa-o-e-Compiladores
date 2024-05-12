@@ -21,8 +21,10 @@ char verifica_palavras_reservadas(char *classe, const char *token) {
     for (int i = 0; i < NUM_PALAVRAS_RESERVADAS; i++) {
 
         if (!strcmp(token, palavras_reservadas[i])) {
-        
-            strcpy(classe, palavras_reservadas[i]);
+
+            strcpy(classe, "<");
+            strcat(classe, palavras_reservadas[i]);
+            strcat(classe, ">");
             return true;
 
         }

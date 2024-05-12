@@ -1,9 +1,9 @@
-VAR, VAR
+VAR, <VAR>
 a, <identificador>
 b, <identificador>
 c, <identificador>
 ;, <simb_ponto_virgula>
-BEGIN, BEGIN
+BEGIN, <BEGIN>
 a, <identificador>
 :=, <simb_atribuicao>
 2, <numero>
@@ -18,5 +18,5 @@ c, <identificador>
 +, <simb_soma>
 4, <numero>
 ;, <simb_ponto_virgula>
-END, END
+END, <END>
 ., <simb_ponto>
