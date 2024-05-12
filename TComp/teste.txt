@@ -1,1 +1,15 @@
+<<<<<<< HEAD
 +-/.
+=======
+VAR
+    n, result;
+BEGIN
+    n := 5;  { Define o número para o qual queremos calcular o fatorial }
+    result := 1;  { Inicializa o resultado como 1 }
+    WHILE n > 0 DO
+        result := result * n;  { Multiplica o resultado pelo número atual }
+        n := n - 1;  { Decrementa o número }
+    END;
+    WHILE(result);  { Escreve o resultado }
+END.
+>>>>>>> cc955db21dcf5958a33a543cc2b94da533df109a
