@@ -1,13 +1,33 @@
 #include<stdio.h> 
 #include<stdlib.h>
-int verif_ident(FILE *arq){
-    char c;
+
+#define Numero (c>= 0 && c<=9)
+#define Letra (c>=A && c<=z)
+#define Outro
+#define CaracterEspecial
+
+
+
+
+char *verif_ident(FILE *arq){
+
     int cont = 0;
-    do{
-        c = fgetc(arq)
+    char *retorno;    
+    char c;
+    c = fgetc(arq);
+    
+    while(Numero || Letra){
+        retorno[cont] = c;
+        c = fgetc(arq);
         cont++;
-    }while(c!=Especial)
-    f
+    }
+
+    fseek(arq,SEEK_CUR,-1);
+
+    if(Numero||Letra||Especial)
+        printf("%s, ident\n", retorno);
+    else
+        printf("%s, <ERRO_LEXICO>\n", retorno);
 
 }
 
