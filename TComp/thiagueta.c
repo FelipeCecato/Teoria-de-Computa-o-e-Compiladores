@@ -6,6 +6,7 @@
 #define CaracterEspecial ( (c>='(' && c <= '/')|| (c >= ':' && c <= '>') ) // Caracteres permitidos no PL0
 #define PalavraEspecial !strcmp(retorno,"BEGIN")||!strcmp(retorno,"VAR")||!strcmp(retorno,"END")||!strcmp(retorno,"ODD")||!strcmp(retorno,"CALL")||!strcmp(retorno,"IF")||!strcmp(retorno,"WHILE")||!strcmp(retorno,"IF")||!strcmp(retorno,"THEN")||!strcmp(retorno,"DO")||!strcmp(retorno,"PROCEDURE")
 #define Outro !Numero && !Letra && !CaracterEspecial && c != EOF &&  c != '\n' && c!=' '
+
 /* Verifica se eh palavra reservada */
 int verificar_palavras_reservadas(char *retorno){
     if(PalavraEspecial)
@@ -19,9 +20,9 @@ void verif_ident(FILE *arq){
     int cont = 0;
     char retorno[1000];    
     char c = '$';
-
     c = fgetc(arq);
-       
+    
+
     if(Letra)
     	while(Numero || Letra){
         	retorno[cont] = c;
@@ -147,13 +148,17 @@ void verif_num(FILE *arq){
     }
 
     fseek(arq,SEEK_CUR,-1);
-    return 0;
+    return;
 
 }
 void verif_espaco(FILE *arq){
 	char c = fgetc(arq);
-	if(c!=' '&& c != '	' && c != '\n')
-		fseek(arq,SEEK_CUR,-1);
+	if(c!=' '&& c != '	' && c != '\n'){
+		//fseek(arq,SEEK_CUR,-1);
+        	ungetc(c, arq);
+    	}
+
+    
 	return;
 }
 
@@ -170,7 +175,7 @@ int verif_eof(FILE*arq){
 void automato(FILE *arq){
     int flag = 0;
     while (!flag){
-	verif_espaco(arq);
+	   verif_espaco(arq);
         verif_ident(arq);
         verif_atrib(arq);
         verif_simb(arq);
