@@ -1,0 +1,5 @@
+
++, <simb_soma>
+-, <simb_subtracao>
+/, <simb_divisao>
+., <simb_ponto>
