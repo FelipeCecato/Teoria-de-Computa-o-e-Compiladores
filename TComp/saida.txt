@@ -1,5 +1,20 @@
-
-+, <simb_soma>
--, <simb_subtracao>
-/, <simb_divisao>
+VAR, <identificador>
+a, <identificador>
+b, <identificador>
+c, <identificador>
+;, <simb_ponto_virgula>
+BEGIN, <identificador>
+a, <identificador>
+:=, <simb_atribuicao>
+2, <numero>
+;, <simb_ponto_virgula>
+b, <identificador>
+:=, <simb_atribuicao>
+3, <numero>
+;, <simb_ponto_virgula>
+c, <identificador>
+:=, <simb_atribuicao>
+4, <numero>
+;, <simb_ponto_virgula>
+END, <identificador>
 ., <simb_ponto>
