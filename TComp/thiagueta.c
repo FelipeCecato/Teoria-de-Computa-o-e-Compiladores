@@ -2,11 +2,10 @@
 #include<stdlib.h>
 #include<string.h>
 #define Numero ( c>= '0' && c<='9' ) // Numeros de 0 a 9
-#define Letra ( c>='A' && c<='z' ) // Letras do alfabeto
-#define CaracterEspecial ( c>='(' && c <= '/') // Caracteres permitidos no PL0
+#define Letra ( (c>='A' && c <='Z') || (c>='a'&& c<='z') ) // Letras do alfabeto
+#define CaracterEspecial ( (c>='(' && c <= '/')|| (c >= ':' && c <= '>') ) // Caracteres permitidos no PL0
 #define PalavraEspecial !strcmp(retorno,"BEGIN")||!strcmp(retorno,"VAR")||!strcmp(retorno,"END")||!strcmp(retorno,"ODD")||!strcmp(retorno,"CALL")||!strcmp(retorno,"IF")||!strcmp(retorno,"WHILE")||!strcmp(retorno,"IF")||!strcmp(retorno,"THEN")||!strcmp(retorno,"DO")||!strcmp(retorno,"PROCEDURE")
-
-
+#define Outro !Numero && !Letra && !CaracterEspecial && c != EOF &&  c != '\n' && c!=' '
 /* Verifica se eh palavra reservada */
 int verificar_palavras_reservadas(char *retorno){
     if(PalavraEspecial)
@@ -15,56 +14,64 @@ int verificar_palavras_reservadas(char *retorno){
 }
 
 /* Verifica se o que esta lendo eh ident */
-int verif_ident(FILE *arq){ 
+void verif_ident(FILE *arq){ 
 
     int cont = 0;
     char retorno[1000];    
     char c = '$';
+
     c = fgetc(arq);
-    
-    while(Numero || Letra){
-        retorno[cont] = c;
-        c = fgetc(arq);
-        cont++;
+       
+    if(Letra)
+    	while(Numero || Letra){
+        	retorno[cont] = c;
+        	c = fgetc(arq);
+        	cont++;
+    	}
+    else{
+	 fseek(arq,SEEK_CUR,-1);
+	 return;
+    	
     }
 
-    retorno[cont-1] = '\0';
+    if(cont == 0)
+    	cont++;    
+    retorno[cont] = '\0';
+	
 
-    fseek(arq,SEEK_CUR,-1);
-
-    if(CaracterEspecial){
-        if(verificar_palavras_reservadas(retorno))
-            printf("%s, %s", retorno, retorno);
-        else
-            printf("%s, ident\n", retorno);
+    if(Outro){
+	    printf("%c, <ERRO_LEXICO>\n", c);
+	    return;
     }
-
-    else if (c != EOF){
-        if(c != '\n')
-            printf("%s, <ERRO_LEXICO>\n", retorno);
-    }
-    else
-        return 1; 
-    return 0;
+    else if(verificar_palavras_reservadas(retorno)){
+    	printf("%s, %s \n",retorno, retorno);
+    } else
+	printf("%s, ident\n",retorno);
+    fseek(arq,SEEK_CUR,-1);    
+    return;
 }
 
 /* Verifica comentario*/
-int verif_comentario(FILE *arq){
-    char c;
-    c = fgetc(arq);
-    if(c == '{')
-    while(c!='}' && c!= EOF)
-        c = fgetc(arq);
-    if(c== EOF){
-        printf("Comentario não está fechado\n");
-        return 1;
+void verif_comentario(FILE *arq){
+    
+    char c = fgetc(arq);
+
+    if(c == '{'){
+        while(c!='}' && c!= EOF)
+            c = fgetc(arq);
+	if(c == EOF){
+	    fseek(arq,SEEK_CUR,-1);
+            printf("Comentario não está fechado\n");
+            return;
+        }
     }
-    return 0;
+    else 
+    	fseek(arq,SEEK_CUR,-1);
+    return;
 }
 
-int verif_menor(FILE *arq){
-    char c;
-    c = fgetc(arq);
+void verif_menor(FILE *arq){
+    char c = fgetc(arq);
     if(c == '>'){
         c = fgetc(arq);
         if(c == '=')
@@ -74,12 +81,11 @@ int verif_menor(FILE *arq){
     }
     else
         fseek(arq, SEEK_CUR, -1);
-    return 0;
+    return;
 }
 
-int verif_maior(FILE *arq){
-    char c;
-    c = fgetc(arq);
+void verif_maior(FILE *arq){
+    char c = fgetc(arq);
 
     if(c == '<'){
         c = fgetc(arq);
@@ -92,12 +98,11 @@ int verif_maior(FILE *arq){
     }
     else
         fseek(arq, SEEK_CUR, -1);
-    return 0;
+    return;
 }
 
-int verif_simb(FILE *arq){
-    char c;
-    c = fgetc(arq);
+void verif_simb(FILE *arq){
+    char c = fgetc(arq);
     if(c == '+')
         printf("mais\n");
     else if(c == '-')
@@ -114,14 +119,13 @@ int verif_simb(FILE *arq){
         printf("div\n");
     else if(c == '(' || c == ')')
         printf("sei la\n");
-
-    fseek(arq, SEEK_CUR, -1);
-    return 0;
+    else
+    	fseek(arq, SEEK_CUR, -1);
+    return;
 }
 
-int verif_atrib(FILE *arq){
-    char c;
-    c = fgetc(arq);
+void verif_atrib(FILE *arq){
+    char c = fgetc(arq);
     if(c == ':'){
         c = fgetc(arq);
         if(c == '=')
@@ -131,38 +135,60 @@ int verif_atrib(FILE *arq){
     }
     else
         fseek(arq, SEEK_CUR, -1);
-    return 0;
+    return;
 }
 
-int verif_num(FILE *arq){
-    char c;
-    c = fgetc(arq);
+void verif_num(FILE *arq){
+    char c = fgetc(arq);
+
     while(Numero){
+	printf("%c",c);
         c = fgetc(arq);
-        printf("loucuraboy");
-        if(!Numero)
-            fseek(arq, SEEK_CUR,-1);
     }
+
+    fseek(arq,SEEK_CUR,-1);
     return 0;
 
 }
+void verif_espaco(FILE *arq){
+	char c = fgetc(arq);
+	if(c!=' '&& c != '	' && c != '\n')
+		fseek(arq,SEEK_CUR,-1);
+	return;
+}
 
+int verif_eof(FILE*arq){
+	char c = fgetc(arq);
+	
+	if(c==EOF)
+		return 1;
+
+	fseek(arq,SEEK_CUR,-1);
+	return 0 ;
+
+}
 void automato(FILE *arq){
     int flag = 0;
     while (!flag){
-        flag += verif_ident(arq);
-        flag += verif_atrib(arq);
-        flag += verif_simb(arq);
-        flag += verif_menor(arq);
-        flag += verif_maior(arq);
-        flag += verif_comentario(arq);
-        flag += verif_num(arq);
+	verif_espaco(arq);
+        verif_ident(arq);
+        verif_atrib(arq);
+        verif_simb(arq);
+        verif_menor(arq);
+        verif_maior(arq);
+        verif_comentario(arq);
+        verif_num(arq);
+	flag = verif_eof(arq);
     }
 }
 
 int main(){
     FILE *arq;
+
+    char teste = '%';
     arq = fopen("teste.txt","r");
+    fseek(arq,SEEK_SET,0);
     automato(arq);
+    fclose(arq);
     return 0;
 }
