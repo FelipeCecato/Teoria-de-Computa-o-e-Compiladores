@@ -2,5 +2,5 @@ VAR a,b,c;
 BEGIN
     a:=2;
     b:=3;
-    c:=4;
+    c:=@+4;
 END.

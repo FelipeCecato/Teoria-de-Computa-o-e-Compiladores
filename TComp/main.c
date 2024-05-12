@@ -9,6 +9,29 @@
 #define true 1
 #define false 0
 
+#define NUM_PALAVRAS_RESERVADAS 11
+
+//matriz de palavras reservadas
+const char *palavras_reservadas[NUM_PALAVRAS_RESERVADAS] = {
+    "CONST", "VAR", "PROCEDURE", "CALL", "BEGIN", "END", "IF", "THEN", "WHILE", "DO", "ODD"
+};
+
+char verifica_palavras_reservadas(char *classe, const char *token) {
+
+    for (int i = 0; i < NUM_PALAVRAS_RESERVADAS; i++) {
+
+        if (!strcmp(token, palavras_reservadas[i])) {
+        
+            strcpy(classe, palavras_reservadas[i]);
+            return true;
+
+        }
+    }
+    
+    return false;
+
+}
+
 char pertence_alfabeto(char c) {
     
     if(isalnum(c) || (c > 41 && c < 48 && c != 44) || (c > 57 && c < 63) )
@@ -65,9 +88,10 @@ char transicao(const char s, const char c, FILE *source_file) {
 
         if(c == ':')
             return 16;
-        
-        //se não é nenhuma
-        //return <ERRO>
+
+        //consome espaços em branco, tabulações e quebras de linha 
+        if(c == ' ' || c == '\r' || c == '\n' || c == '\t')     
+            return 0;   
     }
 
     if(s == 1) {
@@ -133,6 +157,8 @@ char transicao(const char s, const char c, FILE *source_file) {
         return 22;
     }
 
+    return undefined;
+
 }
 
 char estado_final(char s) {
@@ -160,7 +186,7 @@ char estado_final(char s) {
 
 }
 
-void definir_classe(char *classe, const char s, FILE *source_file) {
+void definir_classe(char *classe, const char s, const char *token,FILE *source_file) {
 
     switch (s) {
 
@@ -228,8 +254,8 @@ void definir_classe(char *classe, const char s, FILE *source_file) {
             break;
 
         case 4:
-            //verificar se não é palavra reservada
-            strcpy(classe, "<identificador>");
+            if(!verifica_palavras_reservadas(classe, token))
+                strcpy(classe, "<identificador>");
             break;
 
         default://colocar <ERRO_LEXICO> aqui?
@@ -286,14 +312,15 @@ int main(int argc, char const *argv[]) {
     
     while (c != EOF) {
 
-        // se c, faz parte do alfabeto da linguagem, adiciona o caractere c à cadeia do token
-        token = realloc(token, (strlen(token)+1)*sizeof(char));
-
         s = transicao(s,c, source_file);
 
-        if(s != 1 && s != 4 && s != 22 && pertence_alfabeto(c))
+        // se c, faz parte do alfabeto da linguagem, adiciona o caractere c à cadeia do token
+        if(s != 1 && s != 4 && s != 22 && pertence_alfabeto(c)){
+
+            token = realloc(token, (strlen(token)+1)*sizeof(char));
             strncat(token, &c, 1);
 
+        }
         if(s == undefined) {
 
             strcpy(classe, "<ERRO_LEXICO>");
@@ -309,7 +336,7 @@ int main(int argc, char const *argv[]) {
 
         if(estado_final(s)) {
 
-            definir_classe(classe, s, source_file);
+            definir_classe(classe, s, token, source_file);
 
             if(strcmp(classe, "<comentario>")) {
 
