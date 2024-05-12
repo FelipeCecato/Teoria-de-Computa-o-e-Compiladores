@@ -250,7 +250,7 @@ void definir_classe(char *classe, const char s, const char *token,FILE *source_f
             break;
 
         case 2:
-            strcpy(classe, "<comentário>");
+            strcpy(classe, "<comentario>");
             break;
 
         case 4:

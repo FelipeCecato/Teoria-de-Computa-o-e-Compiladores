@@ -1,6 +1,9 @@
 VAR a,b,c;
+{coment}
 BEGIN
     a:=2;
+{coment}
     b:=3;
-    c:=@+4;
+{coment}
+    c:=@+4{aaaa};
 END.
