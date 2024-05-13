@@ -34,9 +34,9 @@ char verifica_palavras_reservadas(char *classe, const char *token) {
 
 }
 
-char pertence_alfabeto(char c) {
-    
-    if(isalnum(c) || (c > 41 && c < 48 && c != 44) || (c > 57 && c < 63) )
+char consumir_caractere(char c) {
+
+    if(c == ' ' || c == '\r' || c == '\n' || c == '\t')
         return true;
 
     return false;
@@ -317,7 +317,7 @@ int main(int argc, char const *argv[]) {
         s = transicao(s,c, source_file);
 
         // se c, faz parte do alfabeto da linguagem, adiciona o caractere c à cadeia do token
-        if(s != 1 && s != 4 && s != 22 && pertence_alfabeto(c)){
+        if(s != 1 && s != 4 && s != 22 && !consumir_caractere(c)){
 
             token = realloc(token, (strlen(token)+1)*sizeof(char));
             strncat(token, &c, 1);

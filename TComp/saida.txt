@@ -1,7 +1,7 @@
 VAR, <VAR>
 a, <identificador>
-b, <identificador>
-c, <identificador>
+,b, <identificador>
+,c, <identificador>
 ;, <simb_ponto_virgula>
 BEGIN, <BEGIN>
 a, <identificador>
@@ -14,7 +14,7 @@ b, <identificador>
 ;, <simb_ponto_virgula>
 c, <identificador>
 :=, <simb_atribuicao>
-, <ERRO_LEXICO>
+@, <ERRO_LEXICO>
 +, <simb_soma>
 4, <numero>
 ;, <simb_ponto_virgula>
