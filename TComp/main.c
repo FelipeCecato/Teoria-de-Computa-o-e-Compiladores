@@ -36,7 +36,7 @@ char verifica_palavras_reservadas(char *classe, const char *token) {
 
 char consumir_caractere(char c) {
 
-    if(c == ' ' || c == '\r' || c == '\n' || c == '\t')
+    if(c == ' ' || c == '\r' || c == '\n' || c == '\t' || c == ' ' || c == ',')
         return true;
 
     return false;
@@ -69,9 +69,6 @@ char transicao(const char s, const char c, FILE *source_file) {
         if(c == '=')
             return 12;
 
-        if(c == ' ' || c == ',')
-            return 0;
-
         if(c == '{')
             return 1;
         
@@ -92,7 +89,7 @@ char transicao(const char s, const char c, FILE *source_file) {
             return 16;
 
         //consome espaços em branco, tabulações e quebras de linha 
-        if(c == ' ' || c == '\r' || c == '\n' || c == '\t')     
+        if(c == ' ' || c == '\r' || c == '\n' || c == '\t' || c == ' ' || c == ',')     
             return 0;   
     }
 
