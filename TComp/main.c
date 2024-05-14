@@ -96,9 +96,12 @@ char transicao(const char s, const char c, FILE *source_file) {
     if(s == 1) {
 
         //se identificar o fim do comentário avança para o estado 2, 
-        //caso contrário se mantém no estado 1
         if(c == '}')
             return 2;
+
+        //se houve quebra de linha sem '}' relatar erro
+        if(c == '\n')
+            return undefined;
 
         return 1;
     }
@@ -314,7 +317,7 @@ int main(int argc, char const *argv[]) {
         s = transicao(s,c, source_file);
 
         // se c, faz parte do alfabeto da linguagem, adiciona o caractere c à cadeia do token
-        if(s != 1 && s != 4 && s != 22 && !consumir_caractere(c)){
+        if(s != 4 && s != 22 && !consumir_caractere(c)){
 
             token = realloc(token, (strlen(token)+1)*sizeof(char));
             strncat(token, &c, 1);

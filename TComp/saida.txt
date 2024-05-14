@@ -3,6 +3,7 @@ a, <identificador>
 b, <identificador>
 c, <identificador>
 ;, <simb_ponto_virgula>
+{coment, <ERRO_LEXICO>
 BEGIN, <BEGIN>
 a, <identificador>
 :=, <simb_atribuicao>

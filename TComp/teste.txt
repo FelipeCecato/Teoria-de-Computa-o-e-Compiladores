@@ -1,5 +1,5 @@
 VAR a,b,c;
-{coment}
+{coment
 BEGIN
     a:=2;
 {coment}
