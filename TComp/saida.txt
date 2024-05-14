@@ -16,8 +16,11 @@ b, <identificador>
 c, <identificador>
 :=, <simb_atribuicao>
 @, <ERRO_LEXICO>
+(, <abre_parenteses>
+3, <numero>
 +, <simb_soma>
 4, <numero>
+), <fecha_parenteses>
 ;, <simb_ponto_virgula>
 END, <END>
 ., <simb_ponto>

@@ -48,6 +48,12 @@ char transicao(const char s, const char c, FILE *source_file) {
 
     if(s == 0) {
 
+        if(c == '(')
+            return 24;
+        
+        if(c == ')')
+            return 25;
+
         if(c == '+')
             return 15;
         
@@ -172,6 +178,8 @@ char estado_final(char s) {
        s == 20 ||
        s == 22 ||
        s == 23 ||
+       s == 24 ||
+       s == 25 ||
        s == 14 ||
        s == 17 ||
        s == 18 ||
@@ -251,6 +259,14 @@ void definir_classe(char *classe, const char s, const char *token,FILE *source_f
             strcpy(classe, "<simb_ponto_virgula>");
             break;
 
+        case 24:
+            strcpy(classe, "<abre_parenteses>");
+            break;
+
+        case 25:
+            strcpy(classe, "<fecha_parenteses>");
+            break;
+
         case 2:
             strcpy(classe, "<comentario>");
             break;
@@ -278,7 +294,6 @@ int main(int argc, char const *argv[]) {
     //copia o nome do arquivo e abre em modo leitura
     strcpy(filename, argv[1]);
     FILE *source_file;
-    source_file = fopen("teste.txt", "r");
     source_file = fopen(filename, "r");
     if(source_file == NULL){//imprime uma mensagem de erro caso a abertura do arquivo falhe
         ERRO_ARQUIVO

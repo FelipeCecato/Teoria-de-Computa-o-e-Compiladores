@@ -5,5 +5,5 @@ BEGIN
 {coment}
     b:=3;
 {coment}
-    c:=@+4{aaaa};
+    c:=@(3+4){aaaa};
 END.
