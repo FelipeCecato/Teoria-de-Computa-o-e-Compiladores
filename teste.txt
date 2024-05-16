@@ -1,27 +1,23 @@
-PROGRAM Fatorial;
-VAR
-    n, fatorial, i: INTEGER;
+{programa de teste}
+CONST x = 10, y = 20, ident_m@l_formado;
+VAR z, w;
 
-PROCEDURE ReadInteger(VAR x: INTEGER);
+PROCEDURE P1;
 BEGIN
-    READ(x);
+  x := x + y;
+  CALL P2;
 END;
 
-PROCEDURE WriteInteger(x: INTEGER);
+PROCEDURE P2;
 BEGIN
-    WRITE(x);
+  z := x * 2;
+  IF z > 50 THEN
+    w := z - 10;
 END;
 
-PROCEDURE WriteString(s: STRING);
-BEGIN
-    WRITE(s);
-END;
+{comentario nao fechado
 
-PROCEDURE Fatorial(n: INTEGER; VAR f: INTEGER);
-VAR
-    i: INTEGER;
 BEGIN
-    f := 1;
-    FOR i := 1 TO n DO
-        f := f * i;
-END;
+  CALL P1;
+  CALL P2;
+END.

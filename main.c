@@ -59,10 +59,15 @@ int main(int argc, char const *argv[]) {
     
     while (!automato(token, classe, source_file)) {
 
-        fwrite(token, sizeof(char)*strlen(token), 1, output_file);
-        fwrite(", ", sizeof(char)*strlen(", "), 1, output_file);
-        fwrite(classe, sizeof(char)*strlen(classe), 1, output_file);
-        fwrite("\n", sizeof(char)*strlen("\n"), 1, output_file);
+        if(strcmp(classe, "<comentario>")) {
+
+            fwrite(token, sizeof(char)*strlen(token), 1, output_file);
+            fwrite(", ", sizeof(char)*strlen(", "), 1, output_file);
+            fwrite(classe, sizeof(char)*strlen(classe), 1, output_file);
+            fwrite("\n", sizeof(char)*strlen("\n"), 1, output_file);
+
+        } 
+
         token = realloc(token, sizeof(char)*2);
         strcpy(token, "");
 
