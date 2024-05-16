@@ -1,27 +1,28 @@
-# Nome do seu programa executável
 EXECUTAVEL := alex
+ARG_PADRAO := teste.txt
 
-# Variável para o argumento padrão
-ARG_PADRAO := argumento.txt
+.PHONY: help
 
-all: alex
+help:	# Exibe o conteúdo de ajuda
+	@echo "Uso: make [comando]"
+	@echo ""
+	@echo "Comandos disponíveis:"
+	@awk 'BEGIN {FS = ":.?# "} /^[a-zA-Z_-]+:.?# / {printf "  %-20s # %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
-alex: main.c
-	gcc -o alex main.c
+all: # Compila e gera o executável 
+	gcc -o $(EXECUTAVEL) main.c
 
-clean:
-	rm alex
+clean: # Remove o executável 
+	rm -f $(EXECUTAVEL)
 
-install: alex
-	ln -s $(CURDIR)/alex	/usr/local/bin
+install: # Instala o alex 
+	ln -s $(CURDIR)/$(EXECUTAVEL) /usr/local/bin
 
-uninstall:
-	rm -f /usr/local/bin/alex
+uninstall: # Desinstala o alex 
+	rm -f /usr/local/bin/$(EXECUTAVEL)
 
-# Diretiva "run" para executar o programa com o argumento especificado
-run: alex
-	@./$(EXECUTAVEL)	$(ARG)
+run: # Executa o alex 
+	./$(EXECUTAVEL) $(ARG)
 
-# Diretiva "run" com argumento padrão
-run_default:
-	@./$(EXECUTAVEL)	$(ARG_PADRAO)
+run_default: # Executa o alex com o arquivo padrão teste.txt 
+	./$(EXECUTAVEL) $(ARG_PADRAO)
