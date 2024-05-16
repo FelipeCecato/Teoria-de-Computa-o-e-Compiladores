@@ -1,9 +1,27 @@
-VAR a,b,c;
-{coment
+PROGRAM Fatorial;
+VAR
+    n, fatorial, i: INTEGER;
+
+PROCEDURE ReadInteger(VAR x: INTEGER);
 BEGIN
-    a:=2;
-{coment}
-    b:=3;
-{coment}
-    c:=@(3+4){aaaa};
-END.
+    READ(x);
+END;
+
+PROCEDURE WriteInteger(x: INTEGER);
+BEGIN
+    WRITE(x);
+END;
+
+PROCEDURE WriteString(s: STRING);
+BEGIN
+    WRITE(s);
+END;
+
+PROCEDURE Fatorial(n: INTEGER; VAR f: INTEGER);
+VAR
+    i: INTEGER;
+BEGIN
+    f := 1;
+    FOR i := 1 TO n DO
+        f := f * i;
+END;

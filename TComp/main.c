@@ -282,6 +282,10 @@ void definir_classe(char *classe, const char s, const char *token,FILE *source_f
     }
 }
 
+void automato() {
+    
+}
+
 int main(int argc, char const *argv[]) {
 
     //aloca espaço para a variável que vai salvar o nome do arquivo
@@ -338,6 +342,7 @@ int main(int argc, char const *argv[]) {
             strncat(token, &c, 1);
 
         }
+        
         if(s == undefined) {
 
             strcpy(classe, "<ERRO_LEXICO>");
