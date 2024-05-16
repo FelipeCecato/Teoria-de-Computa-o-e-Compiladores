@@ -7,7 +7,7 @@ ARG_PADRAO := argumento.txt
 all: exec
 
 exec: main.c
-	gcc -o exec main.c
+	gcc -g -o exec main.c
 
 # Diretiva "run" para executar o programa com o argumento especificado
 run: exec

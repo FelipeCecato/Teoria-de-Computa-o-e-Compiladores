@@ -100,7 +100,7 @@ char transicao(const char s, const char c, FILE *source_file) {
         if(c == ' ' || c == '\r' || c == '\n' || c == '\t' || c == ' ' || c == ',')     
             return 0;   
         
-        return 22;
+        return undefined;
 
     }
 
@@ -195,7 +195,8 @@ char estado_final(char s) {
        s == 9 ||
        s == 6 ||
        s == 2 ||
-       s == 4)
+       s == 4 ||
+       s == undefined)
         return true;
 
     return false;
@@ -284,12 +285,34 @@ void definir_classe(char *classe, const char s, const char *token,FILE *source_f
             break;
 
         default://colocar <ERRO_LEXICO> aqui?
+            strcpy(classe, "<ERRO_LEXICO>");
             break;
 
     }
 }
 
-void automato() {
+int automato(char * token, char *classe, FILE *source_file) {
+
+    char c = 0, s = 0;
+
+    while (c != EOF && !estado_final(s)) {
+
+        c = fgetc(source_file);
+        s = transicao(s,c, source_file);
+
+        // se c, faz parte do alfabeto da linguagem, adiciona o caractere c à cadeia do token
+        if(s != 4 && s != 24 && !consumir_caractere(c)){
+
+            token = realloc(token, (strlen(token)+1)*sizeof(char));
+            strncat(token, &c, 1);
+
+        }
+        
+    }
+
+    definir_classe(classe, s, token, source_file);
+
+    return (c == EOF);
 
 }
 
@@ -333,56 +356,15 @@ int main(int argc, char const *argv[]) {
         ERRO_ALOCACAO
         return -1; 
     }
-
-    char c, s;
-    c = fgetc(source_file);
-    s = 0;
     
-    while (c != EOF) {
+    while (!automato(token, classe, source_file)) {
 
-        s = transicao(s,c, source_file);
-
-        // se c, faz parte do alfabeto da linguagem, adiciona o caractere c à cadeia do token
-        if(s != 4 && s != 22 && !consumir_caractere(c)){
-
-            token = realloc(token, (strlen(token)+1)*sizeof(char));
-            strncat(token, &c, 1);
-
-        }
-        
-        if(s == undefined) {
-
-            strcpy(classe, "<ERRO_LEXICO>");
-            fwrite(token, sizeof(char)*strlen(token), 1, output_file);
-            fwrite(", ", sizeof(char)*strlen(", "), 1, output_file);
-            fwrite(classe, sizeof(char)*strlen(classe), 1, output_file);
-            fwrite("\n", sizeof(char)*strlen("\n"), 1, output_file);
-            s = 0;
-            token = realloc(token, sizeof(char)*2);
-            strcpy(token, "");
-
-        }
-
-        if(estado_final(s)) {
-
-            definir_classe(classe, s, token, source_file);
-
-            if(strcmp(classe, "<comentario>")) {
-
-                fwrite(token, sizeof(char)*strlen(token), 1, output_file);
-                fwrite(", ", sizeof(char)*strlen(", "), 1, output_file);
-                fwrite(classe, sizeof(char)*strlen(classe), 1, output_file);
-                fwrite("\n", sizeof(char)*strlen("\n"), 1, output_file);
-            
-            }
-            
-            s = 0;
-            token = realloc(token, sizeof(char));
-            strcpy(token, "");
-
-        }
-            
-        c = fgetc(source_file);
+        fwrite(token, sizeof(char)*strlen(token), 1, output_file);
+        fwrite(", ", sizeof(char)*strlen(", "), 1, output_file);
+        fwrite(classe, sizeof(char)*strlen(classe), 1, output_file);
+        fwrite("\n", sizeof(char)*strlen("\n"), 1, output_file);
+        token = realloc(token, sizeof(char)*2);
+        strcpy(token, "");
 
     }
     
