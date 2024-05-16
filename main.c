@@ -318,6 +318,11 @@ int automato(char * token, char *classe, FILE *source_file) {
 
 int main(int argc, char const *argv[]) {
 
+    if(argv[1] == NULL){
+        ERRO_NO_INPUT_FILES
+        return -1;
+    }
+
     //aloca espaço para a variável que vai salvar o nome do arquivo
     char* source_filename = malloc(sizeof(char)*strlen(argv[1]));
     if(source_filename == NULL) {//imprime uma mensagem de erro caso a alocação falhe
