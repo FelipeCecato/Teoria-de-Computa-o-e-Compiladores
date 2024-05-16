@@ -12,7 +12,7 @@ help:	# Exibe o conteúdo de ajuda
 all: alex	# Compila e gera o executável 
 
 alex: # Compila e gera o executável
-	gcc -o $(EXECUTAVEL) main.c
+	gcc -o $(EXECUTAVEL) main.c automato.c
 
 clean: # Remove o executável 
 	rm -f $(EXECUTAVEL)
