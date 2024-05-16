@@ -49,7 +49,7 @@ char transicao(const char s, const char c, FILE *source_file) {
     if(s == 0) {
 
         if(c == '(')
-            return 24;
+            return 26;
         
         if(c == ')')
             return 25;
@@ -57,8 +57,11 @@ char transicao(const char s, const char c, FILE *source_file) {
         if(c == '+')
             return 15;
         
-        if(c == '-')
+        if(c == ',')
             return 13;
+
+        if(c == '-')
+            return 23;
 
         if(c == '/')
             return 19;
@@ -78,9 +81,8 @@ char transicao(const char s, const char c, FILE *source_file) {
         if(c == '{')
             return 1;
         
-        //criar um novo estado para ; no automato
         if(c == ';')
-            return 23;
+            return 18;
         
         if(isalpha(c))
             return 3;
@@ -97,6 +99,9 @@ char transicao(const char s, const char c, FILE *source_file) {
         //consome espaços em branco, tabulações e quebras de linha 
         if(c == ' ' || c == '\r' || c == '\n' || c == '\t' || c == ' ' || c == ',')     
             return 0;   
+        
+        return 22;
+
     }
 
     if(s == 1) {
@@ -152,7 +157,7 @@ char transicao(const char s, const char c, FILE *source_file) {
             return 17;
 
         fseek(source_file, -1, SEEK_CUR);
-        return 18;
+        return undefined;
 
     }
 
@@ -162,7 +167,7 @@ char transicao(const char s, const char c, FILE *source_file) {
             return 21;
 
         fseek(source_file, -1, SEEK_CUR);
-        return 22;
+        return 24;
     }
 
     return undefined;
@@ -176,9 +181,10 @@ char estado_final(char s) {
        s == 15 ||
        s == 19 ||
        s == 20 ||
-       s == 22 ||
+ //      s == 22 ||
        s == 23 ||
        s == 24 ||
+       s == 26 ||
        s == 25 ||
        s == 14 ||
        s == 17 ||
@@ -205,7 +211,7 @@ void definir_classe(char *classe, const char s, const char *token,FILE *source_f
             break;
 
         case 13:
-            strcpy(classe, "<simb_subtracao>");
+            strcpy(classe, "<virgula>");
             break;
 
         case 14:
@@ -223,8 +229,9 @@ void definir_classe(char *classe, const char s, const char *token,FILE *source_f
         case 20:
             strcpy(classe, "<simb_multiplicacao>");
             break;
+
         case 18:
-            strcpy(classe, "<simb_dois_pts>");
+            strcpy(classe, "<simb_ponto_virgula>");
             break;
 
         case 17:
@@ -244,22 +251,22 @@ void definir_classe(char *classe, const char s, const char *token,FILE *source_f
             break;
 
         case 6:
-            strcpy(classe, "<simb_maoir>");
+            strcpy(classe, "<simb_maior>");
             break;
         
         case 9:
             strcpy(classe, "<simb_maior_igual>");
             break;
 
-        case 22:
+        case 24:
             strcpy(classe, "<numero>");
             break;
         
         case 23:
-            strcpy(classe, "<simb_ponto_virgula>");
+            strcpy(classe, "<simb_subtracao>");
             break;
 
-        case 24:
+        case 26:
             strcpy(classe, "<abre_parenteses>");
             break;
 
@@ -283,7 +290,7 @@ void definir_classe(char *classe, const char s, const char *token,FILE *source_f
 }
 
 void automato() {
-    
+
 }
 
 int main(int argc, char const *argv[]) {
