@@ -1,16 +1,22 @@
 # Nome do seu programa executável
-EXECUTAVEL := exec
+EXECUTAVEL := alex
 
 # Variável para o argumento padrão
 ARG_PADRAO := argumento.txt
 
-all: exec
+all: alex
 
-exec: main.c
-	gcc -g -o exec main.c
+alex: main.c
+	gcc -o alex main.c
+
+clean:
+	rm alex
+
+install: alex
+	ln -s $(CURDIR)/alex	/usr/local/bin
 
 # Diretiva "run" para executar o programa com o argumento especificado
-run: exec
+run: alex
 	@./$(EXECUTAVEL)	$(ARG)
 
 # Diretiva "run" com argumento padrão

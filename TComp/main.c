@@ -319,24 +319,29 @@ int automato(char * token, char *classe, FILE *source_file) {
 int main(int argc, char const *argv[]) {
 
     //aloca espaço para a variável que vai salvar o nome do arquivo
-    char* filename = malloc(sizeof(char)*strlen(argv[1]));
-    if(filename == NULL) {//imprime uma mensagem de erro caso a alocação falhe
+    char* source_filename = malloc(sizeof(char)*strlen(argv[1]));
+    if(source_filename == NULL) {//imprime uma mensagem de erro caso a alocação falhe
         ERRO_ALOCACAO
         return -1; 
     }
 
     //copia o nome do arquivo e abre em modo leitura
-    strcpy(filename, argv[1]);
+    strcpy(source_filename, argv[1]);
     FILE *source_file;
-    source_file = fopen(filename, "r");
+    source_file = fopen(source_filename, "r");
     if(source_file == NULL){//imprime uma mensagem de erro caso a abertura do arquivo falhe
         ERRO_ARQUIVO
         return -1;
     }
 
     //cria o arquivo de saída
+    source_filename = strtok(source_filename, ".");
+    size_t output_filename_length = strlen(source_filename) + strlen("_tokens.txt");
+    char* output_filename = malloc(sizeof(char)*output_filename_length);
+    strcpy(output_filename, source_filename);
+    strcat(output_filename, "_tokens.txt");
     FILE *output_file;
-    output_file = fopen("saida.txt", "w");
+    output_file = fopen(output_filename, "w");
     if(output_file == NULL){//imprime uma mensagem de erro caso a abertura do arquivo falhe
         ERRO_ARQUIVO
         return -1;
@@ -369,7 +374,8 @@ int main(int argc, char const *argv[]) {
     }
     
     //libera memória 
-    free(filename);
+    free(source_filename);
+    free(output_filename);
     free(token);
     free(classe);
 
