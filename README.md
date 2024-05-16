@@ -1,5 +1,5 @@
 # Teoria-de-Computa-o-e-Compiladores
-Trabalho desenvolvido para o trabalho da disciplinaTeoria de Computação e Compiladores
+Trabalho desenvolvido para o trabalho da disciplina Teoria de Computação e Compiladores
 
 compilar: 
     gcc -o exec main.c
