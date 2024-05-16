@@ -15,6 +15,9 @@ clean:
 install: alex
 	ln -s $(CURDIR)/alex	/usr/local/bin
 
+uninstall:
+	rm -f /usr/local/bin/alex
+
 # Diretiva "run" para executar o programa com o argumento especificado
 run: alex
 	@./$(EXECUTAVEL)	$(ARG)
