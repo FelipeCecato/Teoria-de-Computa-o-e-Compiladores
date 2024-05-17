@@ -4,7 +4,7 @@
 #include "msgnsErro.h"
 #include "automato.h"
 
-#define MAX_CLASSE_LENGHT 16
+#define MAX_CLASSE_LENGHT 32
 
 int main(int argc, char const *argv[]) {
 
@@ -57,8 +57,10 @@ int main(int argc, char const *argv[]) {
         exit(-1);//encerra o programa 
     }
     
+    //loop que chama várias vezes o autômato até processar todo o arquivo
     while (!automato(token, classe, source_file)) {
 
+        //se a classe for diferente de "<comentario>", insere o par "token, classe" no arquivo de saída
         if(strcmp(classe, "<comentario>")) {
 
             fwrite(token, sizeof(char)*strlen(token), 1, output_file);

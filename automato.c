@@ -9,11 +9,15 @@
 #define false 0
 #define NUM_PALAVRAS_RESERVADAS 11
 
-//matriz de palavras reservadas
+/// @brief vetor de palavras reservadas
 const char *palavras_reservadas[NUM_PALAVRAS_RESERVADAS] = {
     "CONST", "VAR", "PROCEDURE", "CALL", "BEGIN", "END", "IF", "THEN", "WHILE", "DO", "ODD"
 };
 
+/// @brief percorre o vetor checando se o token pertence à lista de palavras reservadas
+/// @param classe - string usada para salvar a classe do token
+/// @param token - string que contém o token
+/// @return retorna verdadeiro se o teken é uma palavra reservada ou falso caso contrário
 char verifica_palavras_reservadas(char *classe, const char *token) {
 
     for (int i = 0; i < NUM_PALAVRAS_RESERVADAS; i++) {
@@ -32,6 +36,9 @@ char verifica_palavras_reservadas(char *classe, const char *token) {
 
 }
 
+/// @brief verifica se o caractere c pertence a uma classe de caracteres a serem desprezados
+/// @param c - caractere lido do código fonte
+/// @return retoena verdadeiro se o caractere c for um dos caracteres a serem desprezados e falso caso contrário
 char consumir_caractere(char c) {
 
     if(c == ' ' || c == '\r' || c == '\n' || c == '\t' || c == ' ')
@@ -41,7 +48,12 @@ char consumir_caractere(char c) {
 
 }
 
-//qual a melhor forma de implementar isso de transição? talvez usar uma matriz seja uma boa ideia
+
+/// @brief função que implementa as transições do autômato, se nenhuma transição é encontrada, o código é interrompido
+/// @param s - estado corrente do autômato
+/// @param c - último caractere lido do código fonte
+/// @param source_file - ponteiro para o arquivo de código fonte
+/// @return retorna o próximo estado baseado no estado corrente e no último caractere lido do código fonte
 char transicao(const char s, const char c, FILE *source_file) {
 
     if(s == 0) {
@@ -173,6 +185,9 @@ char transicao(const char s, const char c, FILE *source_file) {
 
 }
 
+/// @brief verifica se o estado s faz parte do conjunto de estados finais
+/// @param s - estado corrente do autômato
+/// @return retorna verdadeiro se s é estado final e falso caso contrário
 char estado_final(char s) {
 
     if(s == 12 ||
@@ -203,6 +218,11 @@ char estado_final(char s) {
 
 }
 
+/// @brief função que define a classe do token
+/// @param classe - string usada para armazenar a classe do token
+/// @param s - estado corrente do autômato
+/// @param token - string contendo o token 
+/// @param source_file - ponteiro para o arquivo de código fonte
 void definir_classe(char *classe, const char s, const char *token,FILE *source_file) {
 
     switch (s) {
@@ -292,10 +312,16 @@ void definir_classe(char *classe, const char s, const char *token,FILE *source_f
     }
 }
 
+/// @brief função que implementa o autômato
+/// @param token - string onde será salvo o token lido do código fonte
+/// @param classe - string onde será salvo a classe do token processado
+/// @param source_file - ponteiro para o arquivo de código fonte
+/// @return retorna verdadeiro se chegou ao fim do arquivo e falso caso contrário
 int automato(char * token, char *classe, FILE *source_file) {
 
     char c = 0, s = 0;
 
+    //processa a cadeia até encontrar o fim do arquivo ou até atingir um estado final
     while (c != EOF && !estado_final(s)) {
 
         c = fgetc(source_file);
