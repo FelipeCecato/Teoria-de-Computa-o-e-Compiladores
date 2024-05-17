@@ -302,7 +302,7 @@ int automato(char * token, char *classe, FILE *source_file) {
         s = transicao(s,c, source_file);
 
         // se c, faz parte do alfabeto da linguagem, adiciona o caractere c à cadeia do token
-        if(s != 4 && s != 24 && !consumir_caractere(c)){
+        if((s != 4 && s != 24 && !consumir_caractere(c)) || (s == 1 && c == ' ')){
 
             token = realloc(token, (strlen(token)+1)*sizeof(char));
             strncat(token, &c, 1);
