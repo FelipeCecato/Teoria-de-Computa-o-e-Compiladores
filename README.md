@@ -21,7 +21,7 @@ alex entrada.txt
 sendo `entrada.txt` o arquivo que se deseja extrair os tokens. O resultado da execução é o arquivo `entrada_tokens.txt`, contendo os tokens do programa fonte.
 
 
-Para desinstalar basta executar o comando:
+Para desinstalar, basta executar o comando:
 
 ```
 sudo make uninstall
