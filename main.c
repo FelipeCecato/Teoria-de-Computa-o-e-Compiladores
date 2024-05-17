@@ -14,7 +14,7 @@ int main(int argc, char const *argv[]) {
     }
 
     //aloca espaço para a variável que vai salvar o nome do arquivo
-    char* source_filename = malloc(sizeof(char)*strlen(argv[1]));
+    char* source_filename = malloc(sizeof(char)*strlen(argv[1])+1);
     if(source_filename == NULL) {//imprime uma mensagem de erro caso a alocação falhe
         ERRO_ALOCACAO
         exit(-1);//encerra o programa 
@@ -30,10 +30,10 @@ int main(int argc, char const *argv[]) {
     }
 
     //cria o arquivo de saída
-    source_filename = strtok(source_filename, ".");
-    size_t output_filename_length = strlen(source_filename) + strlen("_tokens.txt");
+    char *source_filename_tok = strtok(source_filename, ".");
+    size_t output_filename_length = strlen(source_filename_tok) + strlen("_tokens.txt");
     char* output_filename = malloc(sizeof(char)*output_filename_length);
-    strcpy(output_filename, source_filename);
+    strcpy(output_filename, source_filename_tok);
     strcat(output_filename, "_tokens.txt");
     FILE *output_file;
     output_file = fopen(output_filename, "w");
@@ -58,7 +58,7 @@ int main(int argc, char const *argv[]) {
     }
     
     //loop que chama várias vezes o autômato até processar todo o arquivo
-    while (!automato(token, classe, source_file)) {
+    while (!automato(&token, classe, source_file)) {
 
         //se a classe for diferente de "<comentario>", insere o par "token, classe" no arquivo de saída
         if(strcmp(classe, "<comentario>")) {
@@ -70,8 +70,12 @@ int main(int argc, char const *argv[]) {
 
         } 
 
-        token = realloc(token, sizeof(char)*2);
-        strcpy(token, "");
+        token = realloc(token, sizeof(char));
+        if(token == NULL) {//imprime uma mensagem de erro caso a alocação falhe
+            ERRO_ALOCACAO
+            exit(-1);//encerra o programa 
+        }
+        *token = '\0';
 
     }
     

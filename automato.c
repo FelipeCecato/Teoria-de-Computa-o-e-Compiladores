@@ -317,7 +317,7 @@ void definir_classe(char *classe, const char s, const char *token,FILE *source_f
 /// @param classe - string onde será salvo a classe do token processado
 /// @param source_file - ponteiro para o arquivo de código fonte
 /// @return retorna verdadeiro se chegou ao fim do arquivo e falso caso contrário
-int automato(char * token, char *classe, FILE *source_file) {
+int automato(char **token, char *classe, FILE *source_file) {
 
     char c = 0, s = 0;
 
@@ -330,14 +330,18 @@ int automato(char * token, char *classe, FILE *source_file) {
         // se c, faz parte do alfabeto da linguagem, adiciona o caractere c à cadeia do token
         if((s != 4 && s != 24 && !consumir_caractere(c)) || (s == 1 && c == ' ')){
 
-            token = realloc(token, (strlen(token)+1)*sizeof(char));
-            strncat(token, &c, 1);
+            *token = realloc(*token, (strlen(*token)+1)*sizeof(char));
+                if(*token == NULL) {//imprime uma mensagem de erro caso a alocação falhe
+                ERRO_ALOCACAO
+                exit(-1);//encerra o programa 
+            }
+            strncat(*token, &c, 1);
 
         }
         
     }
 
-    definir_classe(classe, s, token, source_file);
+    definir_classe(classe, s, *token, source_file);
 
     return (c == EOF);
 
