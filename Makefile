@@ -23,5 +23,5 @@ uninstall: # Desinstala o alex
 	rm -f /usr/local/bin/$(EXECUTAVEL)
 	rm -f $(EXECUTAVEL)
 
-run: # Executa o alex 
+run: # Executa o alex. Necessita dos argumentos [ARQ_ENTRADA] e [ARQ_SAIDA]
 	./$(EXECUTAVEL) $(ARQ_ENTRADA) $(ARQ_SAIDA)
