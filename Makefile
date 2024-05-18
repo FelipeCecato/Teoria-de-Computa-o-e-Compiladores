@@ -1,5 +1,4 @@
 EXECUTAVEL := alex
-ARG_PADRAO := teste.txt
 
 .PHONY: help
 
@@ -25,4 +24,4 @@ uninstall: # Desinstala o alex
 	rm -f $(EXECUTAVEL)
 
 run: # Executa o alex 
-	./$(EXECUTAVEL) $(ARG)
+	./$(EXECUTAVEL) $(ARQ_ENTRADA) $(ARQ_SAIDA)

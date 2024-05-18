@@ -17,10 +17,10 @@ sudo make install
 Isso irá criar um link simbólico para o executável no diretório ‘/usr/local/bin’, sendo por isso necessário executar o comando com privilégios de superusuário. Em seguida, o código estará pronto para execução por meio do comando:
 
 ```
-alex entrada.txt
+alex entrada.txt saida.txt
 ```
 
-sendo `entrada.txt` o arquivo que se deseja extrair os tokens. O resultado da execução é o arquivo `entrada_tokens.txt`, contendo os tokens do programa fonte.
+sendo `entrada.txt` o arquivo que se deseja extrair os tokens e `saida.txt`o arquivo onde serão salvos os tokens do programa de entrada.
 
 
 Para desinstalar, ou seja, remover o arquivo executável e seu link simbólico, basta executar o comando
@@ -45,13 +45,13 @@ make alex
 
 Este comando compila o código fonte do programa e cria um executável na pasta atual. Isso permite que você utilize o programa sem a necessidade de uma instalação completa.
 
-Em seguida, basta executá-lo passando como argumento o arquivo txt de entrada:
+Em seguida, basta executá-lo passando como argumento o arquivo txt de entrada e o nome do arquivo de saida:
 
 ```
-make run ARG=entrada.txt
+make run ARQ_ENTRADA=entrada.txt ARQ_SAIDA=saida.txt
 ```
 
-Aqui, `entrada.txt` é o arquivo que você deseja processar. Os tokens extraídos serão inseridos no arquivo de saída que receberá o nome de `entrada_tokens.txt`.
+Aqui, `entrada.txt` é o arquivo que você deseja processar. Os tokens extraídos serão inseridos no arquivo de saída `saida.txt`. Caso não seja passado o nome do arquivo de saída, será criado um arquivo `entrada_tokens.txt` onde serão inseridos os tokens.
 
 Após a utilização do programa, caso se deseje remover o arquivo executável, basta utilizar o comando:
 
