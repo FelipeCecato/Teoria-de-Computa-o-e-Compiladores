@@ -330,7 +330,7 @@ int automato(char **token, char *classe, FILE *source_file) {
         // se c, faz parte do alfabeto da linguagem, adiciona o caractere c à cadeia do token
         if((s != 4 && s != 24 && !consumir_caractere(c)) || (s == 1 && c == ' ')){
 
-            *token = realloc(*token, (strlen(*token)+1)*sizeof(char));
+            *token = realloc(*token, (strlen(*token)+2)*sizeof(char));
                 if(*token == NULL) {//imprime uma mensagem de erro caso a alocação falhe
                 ERRO_ALOCACAO
                 exit(-1);//encerra o programa 
