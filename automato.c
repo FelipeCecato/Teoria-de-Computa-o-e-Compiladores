@@ -7,11 +7,21 @@
 
 #define true 1
 #define false 0
-#define NUM_PALAVRAS_RESERVADAS 11
+#define NUM_PALAVRAS_RESERVADAS 22
 
 /// @brief vetor de palavras reservadas
 const char *palavras_reservadas[NUM_PALAVRAS_RESERVADAS] = {
-    "CONST", "VAR", "PROCEDURE", "CALL", "BEGIN", "END", "IF", "THEN", "WHILE", "DO", "ODD"
+    "CONST", "const", 
+    "VAR", "var", 
+    "PROCEDURE", "procedure", 
+    "CALL", "call", 
+    "BEGIN", "begin", 
+    "END", "end", 
+    "IF", "if", 
+    "THEN", "then", 
+    "WHILE", "while", 
+    "DO", "do", 
+    "ODD", "odd"
 };
 
 /// @brief percorre o vetor checando se o token pertence à lista de palavras reservadas
@@ -25,7 +35,7 @@ char verifica_palavras_reservadas(char *classe, const char *token) {
         if (!strcmp(token, palavras_reservadas[i])) {
 
             strcpy(classe, "<");
-            strcat(classe, palavras_reservadas[i]);
+            strcat(classe, palavras_reservadas[(i%2 ? i-1 : i)]);
             strcat(classe, ">");
             return true;
 
