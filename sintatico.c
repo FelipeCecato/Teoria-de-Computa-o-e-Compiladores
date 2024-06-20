@@ -6,21 +6,29 @@ int analise_ident(char *token){
 
 	automato(&token, classe, source_file);
 
-	if(token == , ){
-		if(analise_ident())
+	if(token == ident){
+		automato(&token, classe, source_file);
+		if(token == ,)
+			return analise_ident();
+		else{
 			return 1;
+		}
 	}
 
-	else if(token == ident){
-		return 1;
-	}
+	return 0;
 
-	else if(token == ;){
-		return 0;
-	}
-	return 1;
 }
 
+int analise_VAR(){
+	
+	if(analise_ident()){
+		if(token == ;)`
+			return 1;
+		return 0;
+	}
+
+	return 0;
+}
 
 int analise_sintatica(char *token){
 	
