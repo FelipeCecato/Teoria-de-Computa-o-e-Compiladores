@@ -1,0 +1,15 @@
+CONST
+    max = 10;      { Define a constante max como 10 }
+VAR
+    sum, i;       { Declara as variáveis sum e i }
+BEGIN
+    sum := 0;     { Inicializa sum com 0 }
+    i := 1;       { Inicializa i com 1 }
+    WHILE i <= max DO
+    BEGIN
+        sum := sum + i;  { Adiciona o valor de i a sum }
+        i := i + 1;      { Incrementa i }
+    END;
+    sum := sum;    { Atribui o valor de sum a ele mesmo, apenas para finalizar }
+END.
+
