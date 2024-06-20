@@ -233,7 +233,7 @@ char estado_final(char s) {
 /// @param s - estado corrente do autômato
 /// @param token - string contendo o token 
 /// @param source_file - ponteiro para o arquivo de código fonte
-void definir_classe(char *classe, const char s, const char *token,FILE *source_file) {
+void definir_classe(char *classe, const char s, char *token,FILE *source_file) {
 
     switch (s) {
 
@@ -307,7 +307,8 @@ void definir_classe(char *classe, const char s, const char *token,FILE *source_f
 
         case 2:
             //estado 2 indica comentário, assim sendo, é preciso obter o próximo token
-            automato(token, classe, source_file);
+            *token = '\0';
+            automato(&token, classe, source_file);
             break;
 
         case 4:

@@ -1,0 +1,27 @@
+{ Programa de exemplo em PL/0 }
+
+CONST
+  x = 10, { declaração de constantes }
+  y = 20;
+
+VAR
+  a, b, c; { declaração de variáveis }
+
+PROCEDURE ExampleProc;
+BEGIN
+  a := a + b;
+  IF a < c THEN
+    c := c - 1
+END;
+
+BEGIN
+  a := x; { atribuição }
+  b := y;
+  CALL ExampleProc; { chamada de procedimento }
+  WHILE a > 0 DO
+    BEGIN
+      a := a - 1;
+      IF ODD a THEN
+        c := c + 1
+    END
+END.

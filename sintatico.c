@@ -378,7 +378,6 @@ void analisador_sintatico(FILE* source_file) {
 		return;
 	}
 
-	ERRO;
 	free(token);
     free(classe);
 
