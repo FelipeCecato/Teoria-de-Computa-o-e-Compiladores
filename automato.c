@@ -306,7 +306,8 @@ void definir_classe(char *classe, const char s, const char *token,FILE *source_f
             break;
 
         case 2:
-            strcpy(classe, "<comentario>");
+            //estado 2 indica comentário, assim sendo, é preciso obter o próximo token
+            automato(token, classe, source_file);
             break;
 
         case 4:
