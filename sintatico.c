@@ -78,20 +78,46 @@ int analise_bloco(){
 */
 //===================================================================================
 
+void obter_token(char **token, char *classe, FILE *source_file, int *linha) {
+
+	automato(token, classe, source_file, linha);
+	if(!strcmp(classe, "<comentario>")) {
+
+		automato(token, classe, source_file, linha);
+
+	}else if(!strcmp(classe, "<ERRO_LEXICO_1>")) {
+
+		ERRO_LEXICO_1
+		automato(token, classe, source_file, linha);
+
+	}else if(!strcmp(classe, "<ERRO_LEXICO_2>")) {
+
+		ERRO_LEXICO_2
+		automato(token, classe, source_file, linha);
+
+	}else if(!strcmp(classe, "<ERRO_LEXICO_3>")) {
+
+		ERRO_LEXICO_3
+		automato(token, classe, source_file, linha);
+
+	}
+
+}
+
 void mais_const(char **token, char *classe, FILE *source_file, int *linha) {
 
 	if(!strcmp(classe, "<identificador>")) {
 
-		automato(token, classe, source_file, linha);
+		obter_token(token, classe, source_file, linha);
 		if(!strcmp(classe, "<simb_igual>")) {
 
-			automato(token, classe, source_file, linha);
+			obter_token(token, classe, source_file, linha);
 			if(!strcmp(classe, "<numero>")) {
 
-				automato(token, classe, source_file, linha);
+				obter_token(token, classe, source_file, linha);
 				if(!strcmp(classe, "<virgula>")) {
 
-					automato(token, classe, source_file, linha);
+					obter_token(token, classe, source_file, linha);
 					mais_const(token, classe, source_file, linha);
 
 				} 
@@ -106,11 +132,11 @@ void constante(char **token, char *classe, FILE *source_file, int *linha) {
 
 	if(!strcmp(classe, "<CONST>")) {
 
-		automato(token, classe, source_file, linha);
+		obter_token(token, classe, source_file, linha);
 		mais_const(token, classe, source_file, linha);
 		if(!strcmp(classe, "<simb_ponto_virgula>")) {
 
-			automato(token, classe, source_file, linha);
+			obter_token(token, classe, source_file, linha);
 			
 		}
 		
@@ -123,10 +149,10 @@ void mais_var(char **token, char *classe, FILE *source_file, int *linha) {
 
 	if(!strcmp(classe, "<identificador>")) {
 
-		automato(token, classe, source_file, linha);
+		obter_token(token, classe, source_file, linha);
 		if(!strcmp(classe, "<virgula>")) {
 
-			automato(token, classe, source_file, linha);
+			obter_token(token, classe, source_file, linha);
 			mais_var(token, classe, source_file, linha);
 
 		} 
@@ -141,11 +167,11 @@ void variavel(char **token, char *classe, FILE *source_file, int *linha) {
 
 	if(!strcmp(classe, "<VAR>")) {
 
-		automato(token, classe, source_file, linha);
+		obter_token(token, classe, source_file, linha);
 		mais_var(token, classe, source_file, linha);
 		if(!strcmp(classe, "<simb_ponto_virgula>")) {
 
-			automato(token, classe, source_file, linha);
+			obter_token(token, classe, source_file, linha);
 			if(!strcmp(classe, "<identificador>")) {
 
 			}
@@ -160,7 +186,7 @@ void expressao(char **token, char *classe, FILE *source_file, int *linha) {
 
 	if(!strcmp(classe, "<simb_soma>") || !strcmp(classe, "<simb_subtracao>")) {
 
-		automato(token, classe, source_file, linha);
+		obter_token(token, classe, source_file, linha);
 
 	}
 	fator(token, classe, source_file, linha);
@@ -173,22 +199,22 @@ void fator(char **token, char *classe, FILE *source_file, int *linha) {
 
 	if(!strcmp(classe, "<identificador>")) {
 
-		automato(token, classe, source_file, linha);
+		obter_token(token, classe, source_file, linha);
 
 	}else if(!strcmp(classe, "<numero>")) {
 
-		automato(token, classe, source_file, linha);
+		obter_token(token, classe, source_file, linha);
 
 	}else if(!strcmp(classe, "<identificador>")) {
 
-		automato(token, classe, source_file, linha);
+		obter_token(token, classe, source_file, linha);
 		if(!strcmp(classe, "<abre_parenteses>")) {
 
-			automato(token, classe, source_file, linha);
+			obter_token(token, classe, source_file, linha);
 			expressao(token, classe, source_file, linha);
 			if(!strcmp(classe, "<fecha_parenteses>")) {
 
-				automato(token, classe, source_file, linha);
+				obter_token(token, classe, source_file, linha);
 
 			}
 
@@ -202,7 +228,7 @@ void mais_fatores(char **token, char *classe, FILE *source_file, int *linha) {
 
 	if(!strcmp(classe, "<simb_multiplicacao>") || !strcmp(classe, "<simb_divisao>")) {
 
-		automato(token, classe, source_file, linha);
+		obter_token(token, classe, source_file, linha);
 		fator(token, classe, source_file, linha);
 		mais_fatores(token, classe, source_file, linha);
 
@@ -214,7 +240,7 @@ void mais_termos(char **token, char *classe, FILE *source_file, int *linha) {
 
 	if(!strcmp(classe, "<simb_soma>") || !strcmp(classe, "<simb_subtracao>")) {
 
-		automato(token, classe, source_file, linha);
+		obter_token(token, classe, source_file, linha);
 		fator(token, classe, source_file, linha);
 		mais_fatores(token, classe, source_file, linha);
 		mais_termos(token, classe, source_file, linha);
@@ -226,9 +252,8 @@ void condicao(char **token, char *classe, FILE *source_file, int *linha) {
 
 	if(!strcmp(classe, "<ODD>")) {
 
-		automato(token, classe, source_file, linha);
+		obter_token(token, classe, source_file, linha);
 		expressao(token, classe, source_file, linha);
-		//automato(token, classe, source_file, linha);
 
 	}
 
@@ -239,7 +264,7 @@ void condicao(char **token, char *classe, FILE *source_file, int *linha) {
 	|| !strcmp(classe, "<simb_maior>")
 	|| !strcmp(classe, "<simb_maior_igual>")) {
 
-		automato(token, classe, source_file, linha);
+		obter_token(token, classe, source_file, linha);
 
 	}
 	expressao(token, classe, source_file, linha);
@@ -250,53 +275,53 @@ void comando(char **token, char *classe, FILE *source_file, int *linha) {
 
 	if(!strcmp(classe, "<identificador>")) {
 
-		automato(token, classe, source_file, linha);
+		obter_token(token, classe, source_file, linha);
 		if(!strcmp(classe, "<simb_atribuicao>")) {
 
-			automato(token, classe, source_file, linha);
+			obter_token(token, classe, source_file, linha);
 			expressao(token, classe, source_file, linha);
 
 		}
 
 	}else if(!strcmp(classe, "<CALL>")) {
 
-		automato(token, classe, source_file, linha);
+		obter_token(token, classe, source_file, linha);
 		if(!strcmp(classe, "<identificador>")) {
 
-			automato(token, classe, source_file, linha);
+			obter_token(token, classe, source_file, linha);
 
 		}
 
 	}else if(!strcmp(classe, "<BEGIN>")) {
 
-		automato(token, classe, source_file, linha);
+		obter_token(token, classe, source_file, linha);
 		comando(token, classe, source_file, linha);
 		mais_cmd(token, classe, source_file, linha);
 		if(!strcmp(classe, "<END>")) {
 
-			automato(token, classe, source_file, linha);
+			obter_token(token, classe, source_file, linha);
 
 		}
 		
 
 	}else if(!strcmp(classe, "<IF>")) {
 
-		automato(token, classe, source_file, linha);
+		obter_token(token, classe, source_file, linha);
 		condicao(token, classe, source_file, linha);
 		if(!strcmp(classe, "<THEN>")) {
 
-			automato(token, classe, source_file, linha);
+			obter_token(token, classe, source_file, linha);
 			comando(token, classe, source_file, linha);
 
 		}
 
 	}else if(!strcmp(classe, "<WHILE>")) {
 
-		automato(token, classe, source_file, linha);
+		obter_token(token, classe, source_file, linha);
 		condicao(token, classe, source_file, linha);
 		if(!strcmp(classe, "<DO>")) {
 
-			automato(token, classe, source_file, linha);
+			obter_token(token, classe, source_file, linha);
 			comando(token, classe, source_file, linha);
 			
 		}
@@ -309,7 +334,7 @@ void mais_cmd(char **token, char *classe, FILE *source_file, int *linha) {
 
 	if(!strcmp(classe, "<simb_ponto_virgula>")) {
 
-		automato(token, classe, source_file, linha);
+		obter_token(token, classe, source_file, linha);
 		comando(token, classe, source_file, linha);	
 		mais_cmd(token, classe, source_file, linha);	
 
@@ -321,22 +346,22 @@ void procedimento(char **token, char *classe, FILE *source_file, int *linha) {
 
 	if(!strcmp(classe, "<PROCEDURE>")) {
 
-		automato(token, classe, source_file, linha);
+		obter_token(token, classe, source_file, linha);
 		if(!strcmp(classe, "<identificador>")) {
 
-			automato(token, classe, source_file, linha);
+			obter_token(token, classe, source_file, linha);
 			if(!strcmp(classe, "<simb_ponto_virgula>")) {
 
-				automato(token, classe, source_file, linha);
+				obter_token(token, classe, source_file, linha);
 				constante(token, classe, source_file, linha);
 				variavel(token, classe, source_file, linha);
 				procedimento(token, classe, source_file, linha);
 				comando(token, classe, source_file, linha);
 
-				automato(token, classe, source_file, linha);
+				obter_token(token, classe, source_file, linha);
 				if(!strcmp(classe, "<simb_ponto_virgula>")) {
 
-					automato(token, classe, source_file, linha);
+					obter_token(token, classe, source_file, linha);
 					procedimento(token, classe, source_file, linha);
 
 				}
@@ -368,14 +393,14 @@ void analisador_sintatico(FILE* source_file) {
         exit(-1);//encerra o programa 
     }
 
-	automato(&token, classe, source_file,  &linha);
+	obter_token(&token, classe, source_file,  &linha);
 	constante(&token, classe, source_file,  &linha);
 	variavel(&token, classe, source_file,  &linha);
 	procedimento(&token, classe, source_file,  &linha);
 	comando(&token, classe, source_file,  &linha);
 
 	//verifica se chegou ao fim do arquivo
-	if(automato(&token, classe, source_file,  &linha)) {
+	if(automato(&token, classe, source_file, &linha)) {
 
 		free(token);
     	free(classe);
