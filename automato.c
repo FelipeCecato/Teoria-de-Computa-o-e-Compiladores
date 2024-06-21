@@ -327,9 +327,16 @@ void definir_classe(char *classe, const char s, char *token, FILE *source_file, 
                 strcpy(classe, "<identificador>");
             break;
 
-        //case 22 || 27 || 28
+        case 27:
+            strcpy(classe, "<ERRO_LEXICO_1>");//ERRO_LEXICO_1 indica comentário não fechado
+            break;
+        
+        case 28:
+            strcpy(classe, "<ERRO_LEXICO_2>");//ERRO_LEXICO_2 indica o uso do token inválido ":"
+            break;
+        //case 22 
         default:
-            strcpy(classe, "<ERRO_LEXICO>");
+            strcpy(classe, "<ERRO_LEXICO_3>");//ERRO_LEXICO_3 indica caracateres que não pertencem ao alfabeto da linguagem (SyntaxError: Unexpected token ILLEGAL)
             break;
 
     }
