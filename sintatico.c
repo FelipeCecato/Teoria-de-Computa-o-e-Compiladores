@@ -384,6 +384,7 @@ void analisador_sintatico(FILE* source_file) {
 	}
 
 	//se não chegou ao fim do arquivo: ERRO
+	ERRO_SINTATICO_1
 
 	free(token);
     free(classe);

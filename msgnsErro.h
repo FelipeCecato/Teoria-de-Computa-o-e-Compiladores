@@ -7,8 +7,9 @@
 #define ERRO_ARQUIVO    printf("alex: erro: falha na abertura do arquivo.\n");
 #define ERRO_NO_INPUT_FILES printf("alex: erro: sem arquivos de entrada\n");
 #define ERRO_TRANSICAO  printf("alex: erro: transicao inexistente");
-#define ERRO_LEXICO_1  printf("alex: Erro sintatico na linha %d: comentário não fechado", *linha);
-#define ERRO_LEXICO_2  printf("alex: Erro sintatico na linha %d: caractere inválido ':', você quis dizer ':='?", *linha);
-#define ERRO_LEXICO_1  printf("alex: Erro sintatico na linha %d: '%s' sequência de caracteres invalidos ", *linha, *token);
+#define ERRO_LEXICO_1  printf("alex: Erro lexico na linha %d: comentário não fechado \n6", *linha);
+#define ERRO_LEXICO_2  printf("alex: Erro lexico na linha %d: caractere inválido ':', você quis dizer ':='?\n", *linha);
+#define ERRO_LEXICO_3  printf("alex: Erro lexico na linha %d: caractere invalido '%s'\n", *linha, *token);
+#define ERRO_SINTATICO_1  printf("alex: Erro sintatico na linha %d: código inesperado após o fim do programa\n", linha);
 
 #endif

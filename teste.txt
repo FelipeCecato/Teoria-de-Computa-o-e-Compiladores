@@ -1,27 +1,40 @@
-{ Programa de exemplo em PL/0 }
+{ Outro programa de exemplo em PL/0 }
 
 CONST
-  x = 10, { declaração de constantes }
-  y = 20;
+  max = 50, min = 1;
 
 VAR
-  a, b, c; { declaração de variáveis }
+  i, sum, temp;
 
-PROCEDURE ExampleProc;
+PROCEDURE CalculateSum;
 BEGIN
-  a := a + b;
-  IF a < c THEN
-    c := c - 1
+  sum := 0;
+  i := min;
+  WHILE i <= max DO
+  BEGIN
+    sum := sum + i;
+    i := i + 1;
+  END
 END;
 
 BEGIN
-  a := x; { atribuição }
-  b := y;
-  CALL ExampleProc; { chamada de procedimento }
-  WHILE a > 0 DO
+  sum := 0;
+  temp := max - min;
+  CALL CalculateSum;
+  IF sum >= temp THEN
     BEGIN
-      a := a - 1;
-      IF ODD a THEN
-        c := c + 1
+      i := 10;
+      WHILE i > 0 DO
+      BEGIN
+        sum := sum + i;
+        i := i - 1;
+      END
     END
 END.
+
+
+
+{código que não deveria existir por estar além do ponto final}
+BEGIN 
+    a := c - 4 + b;
+END
