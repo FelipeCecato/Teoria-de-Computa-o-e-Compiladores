@@ -3,6 +3,6 @@
 
 #include <stdio.h>
 
-int automato(char **token, char *classe, FILE *source_file);
+int automato(char **token, char *classe, FILE *source_file, int *linha);
 
 #endif

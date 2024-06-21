@@ -49,9 +49,17 @@ char verifica_palavras_reservadas(char *classe, const char *token) {
 /// @brief verifica se o caractere c pertence a uma classe de caracteres a serem desprezados
 /// @param c - caractere lido do código fonte
 /// @return retoena verdadeiro se o caractere c for um dos caracteres a serem desprezados e falso caso contrário
-char consumir_caractere(char c) {
+char consumir_caractere(char c, int *linha) {
 
-    if(c == ' ' || c == '\r' || c == '\n' || c == '\t' || c == ' ')
+    if(c == '\n') {
+
+        (*linha)++;
+        //printf("%d\n", *linha);
+        return true;
+
+    }
+
+    if(c == ' ' || c == '\r' || c == '\t' || c == ' ')
         return true;
 
     return false;
@@ -64,7 +72,7 @@ char consumir_caractere(char c) {
 /// @param c - último caractere lido do código fonte
 /// @param source_file - ponteiro para o arquivo de código fonte
 /// @return retorna o próximo estado baseado no estado corrente e no último caractere lido do código fonte
-char transicao(const char s, const char c, FILE *source_file) {
+char transicao(const char s, const char c, FILE *source_file, int *linha) {
 
     if(s == 0) {
 
@@ -117,7 +125,7 @@ char transicao(const char s, const char c, FILE *source_file) {
             return 16;
 
         //consome espaços em branco, tabulações e quebras de linha 
-        if(c == ' ' || c == '\r' || c == '\n' || c == '\t' || c == ' ')     
+        if(c == ' ' || c == '\r' || c == '\n' || c == '\t' || c == ' ') 
             return 0;   
         
         return 22;
@@ -131,8 +139,12 @@ char transicao(const char s, const char c, FILE *source_file) {
             return 2;
 
         //se houve quebra de linha sem '}' relatar erro
-        if(c == '\n')
+        if(c == '\n') {
+            
+            (*linha)++;
             return 27;
+
+        }
 
         return 1;
     }
@@ -233,7 +245,7 @@ char estado_final(char s) {
 /// @param s - estado corrente do autômato
 /// @param token - string contendo o token 
 /// @param source_file - ponteiro para o arquivo de código fonte
-void definir_classe(char *classe, const char s, char *token,FILE *source_file) {
+void definir_classe(char *classe, const char s, char *token, FILE *source_file, int *linha) {
 
     switch (s) {
 
@@ -307,8 +319,7 @@ void definir_classe(char *classe, const char s, char *token,FILE *source_file) {
 
         case 2:
             //estado 2 indica comentário, assim sendo, é preciso obter o próximo token
-            *token = '\0';
-            automato(&token, classe, source_file);
+            automato(&token, classe, source_file, linha);
             break;
 
         case 4:
@@ -329,18 +340,20 @@ void definir_classe(char *classe, const char s, char *token,FILE *source_file) {
 /// @param classe - string onde será salvo a classe do token processado
 /// @param source_file - ponteiro para o arquivo de código fonte
 /// @return retorna verdadeiro se chegou ao fim do arquivo e falso caso contrário
-int automato(char **token, char *classe, FILE *source_file) {
+int automato(char **token, char *classe, FILE *source_file, int *linha) {
 
     char c = 0, s = 0;
+    strcpy(*token, "");
+    strcpy(classe, "");
 
     //processa a cadeia até encontrar o fim do arquivo ou até atingir um estado final
     while (c != EOF && !estado_final(s)) {
 
         c = fgetc(source_file);
-        s = transicao(s,c, source_file);
+        s = transicao(s,c, source_file, linha);
 
         // se c, faz parte do alfabeto da linguagem, adiciona o caractere c à cadeia do token
-        if((s != 4 && s != 24 && !consumir_caractere(c)) || (s == 1 && c == ' ')){
+        if((s != 4 && s != 24 && !consumir_caractere(c, linha)) || (s == 1 && c == ' ')){
 
             *token = realloc(*token, (strlen(*token)+2)*sizeof(char));
                 if(*token == NULL) {//imprime uma mensagem de erro caso a alocação falhe
@@ -353,7 +366,7 @@ int automato(char **token, char *classe, FILE *source_file) {
         
     }
 
-    definir_classe(classe, s, *token, source_file);
+    definir_classe(classe, s, *token, source_file, linha);
 
     return (c == EOF);
 
