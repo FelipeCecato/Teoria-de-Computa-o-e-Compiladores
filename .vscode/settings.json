@@ -60,6 +60,7 @@
     "msgnserro.h": "c",
     "ctype.h": "c",
     "automato.h": "c",
-    "stdlib.h": "c"
+    "stdlib.h": "c",
+    "simple_linked_list.h": "c"
   }
 }
