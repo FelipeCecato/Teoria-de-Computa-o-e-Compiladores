@@ -1,38 +1,63 @@
-#ifndef LINKED_LIST_H
-#define LINKED_LIST_H
+#ifndef SIMPLE_LINKED_LIST_H
+#define SIMPLE_LINKED_LIST_H
 
 #include <stddef.h>
 
-typedef struct _snode SNode;
+// Node structure definition
+typedef struct _snode {
+    char *val;
+    struct _snode *next;
+} SNode;
 
-typedef struct _linked_list LinkedList;
+// Linked list structure definition
+typedef struct _linked_list {
+    SNode *begin;
+    SNode *end;
+    size_t size;
+} LinkedList;
 
-SNode *SNode_create(int val);
+// Function declarations
 
-LinkedList *LinkedList_create();
+// Create a new node with the given value
+SNode *SNode_create(const char *val);
 
-void LinkedList_add_first(LinkedList *L, int val);
+// Create a new linked list
+LinkedList *LinkedList_create(void);
 
-void LinkedList_add_last_slow(LinkedList *L, int val);
+// Add a new node with the given value at the beginning of the list
+void LinkedList_add_first(LinkedList *L, const char *val);
 
-void LinkedList_add_last(LinkedList *L, int val);
+// Add a new node with the given value at the end of the list (inefficient version)
+void LinkedList_add_last_slow(LinkedList *L, const char *val);
 
-void LinkedList_remove(LinkedList *L, int val);
+// Add a new node with the given value at the end of the list (efficient version)
+void LinkedList_add_last(LinkedList *L, const char *val);
 
-void LinkedList_remove_all(LinkedList *L, int val);
+// Remove a node with the given value from the list
+void LinkedList_remove(LinkedList *L, const char *val);
 
+// Remove all nodes with the given value from the list
+void LinkedList_remove_all(LinkedList *L, const char *val);
+
+// Print the values of all nodes in the list
 void LinkedList_print(const LinkedList *L);
 
-void LinkedList_destroy(LinkedList *L);
-
+// Get the size of the list
 size_t LinkedList_size(LinkedList *L);
 
-int LinkedList_first_val(LinkedList *L);
+// Get the value of the first node in the list
+char* LinkedList_first_val(LinkedList *L);
 
-int LinkedList_last_val(LinkedList *L);
+// Get the value of the last node in the list
+char* LinkedList_last_val(LinkedList *L);
 
-int LinkedList_get_val(LinkedList *L, int index);
+// Get the value of the node at the given index in the list
+char* LinkedList_get_val(LinkedList *L, int index);
 
+// Check if the list is empty and exit with an error if it is
 void LinkedList_empty_check(LinkedList *L);
 
-#endif
+// Destroy the list and free all allocated memory
+void LinkedList_destroy(LinkedList *L);
+
+#endif // SIMPLE_LINKED_LIST_H
