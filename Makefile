@@ -11,7 +11,7 @@ help:	# Exibe o conteúdo de ajuda
 all: alex	# Compila e gera o executável 
 
 alex: # Compila e gera o executável
-	gcc -g -o $(EXECUTAVEL) main.c automato.c sintatico.c
+	gcc -g -o $(EXECUTAVEL) main.c automato.c sintatico.c listas_encadeadas_simples/simple_linked_list.c
 
 clean: # Remove o executável 
 	rm -f $(EXECUTAVEL)
