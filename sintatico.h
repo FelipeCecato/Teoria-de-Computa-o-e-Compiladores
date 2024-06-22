@@ -17,5 +17,7 @@ void comando(char **token, char *classe, FILE *source_file, int *linha);
 void mais_cmd(char **token, char *classe, FILE *source_file, int *linha);
 void procedimento(char **token, char *classe, FILE *source_file, int *linha);
 void obter_token(char **token, char *classe, FILE *source_file, int *linha);
+void erro(int codigo, char **token, char *classe, FILE *source_file, int *linha);
+void printError(int codigo, char **token, char *classe, FILE *source_file, int *linha);
 
 #endif

@@ -374,9 +374,34 @@ void procedimento(char **token, char *classe, FILE *source_file, int *linha) {
 
 }
 
+void printError(int codigo, char **token, char *classe, FILE *source_file, int *linha){
+
+	switch (codigo)	{
+
+		case 1:
+			ERRO_SINTATICO_1
+			break;
+
+		default:
+			break;
+
+	}
+
+}
+
+void erro(int codigo, char **token, char *classe, FILE *source_file, int *linha) {
+
+	printError(codigo, token, classe, source_file, linha);
+
+	while() {
+		obter_token(token, classe, source_file, linha);
+	}
+
+}
+
 void analisador_sintatico(FILE* source_file) {
 
-	int linha = 1;
+	int linha = 0;
 
 	char *token;
     token = malloc(sizeof(char));
@@ -410,6 +435,7 @@ void analisador_sintatico(FILE* source_file) {
 
 	//se não chegou ao fim do arquivo: ERRO
 	ERRO_SINTATICO_1
+	
 
 	free(token);
     free(classe);

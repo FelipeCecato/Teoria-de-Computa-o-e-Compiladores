@@ -1,4 +1,5 @@
-{ Outro programa de exemplo em PL/0 }
+{ Outro programa de exemplo em PL/0 
+
 
 CONST
   max = 50, min = 1;
