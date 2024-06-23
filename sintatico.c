@@ -26,7 +26,7 @@
 #define missing_expression 11
 #define missing_close_brackets 12
 #define missing_relational_op 13 //funcionando
-#define misssing_condition 14
+#define missing_condition 14 //funcionando
 #define unexpected_ODD 15 //funcionando
 
 //index de cada regra no vetor "pilhaRegras"
@@ -308,10 +308,12 @@ void condicao(char **token, char *classe, FILE *source_file, int *linha,  Linked
 
 	}
 
-// odd: 0 relacional: 0 --> missing_ODD 
-// odd: 0 relacional: 1 --> ok
-// odd: 1 relacional: 0 --> ok 
-// odd: 1 relacional: 1 --> unexpected_ODD
+	if(!strcmp(classe, "<THEN>") || !strcmp(classe, "<DO>")) {
+
+		erro(missing_condition, token, classe, source_file, linha, simb_sincr,pilhaRegras);
+		return;
+		
+	}
 	
 	expressao(token, classe, source_file, linha, simb_sincr, pilhaRegras);
 	if(!strcmp(classe, "<simb_diferente>") 
@@ -322,9 +324,7 @@ void condicao(char **token, char *classe, FILE *source_file, int *linha,  Linked
 
 		if(odd){
 
-			//problema
 			erro(unexpected_ODD, token, classe, source_file, linha, simb_sincr,pilhaRegras);
-			//obter_token(token, classe, source_file, linha);
 			expressao(token, classe, source_file, linha, simb_sincr, pilhaRegras);
 
 		}else {

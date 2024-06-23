@@ -25,11 +25,10 @@ BEGIN
   IF sum >= temp THEN
     BEGIN
       i := 10;
-      WHILE i > 0 
+      WHILE DO
       BEGIN
         sum := sum + i;
         i := i - 1
-  temp := max - min;
-  temp := max - min;
+      END
     END
 END.
