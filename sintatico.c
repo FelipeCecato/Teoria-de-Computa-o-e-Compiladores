@@ -16,7 +16,7 @@
 #define unexpected_code 1 //funcionando
 #define missing_equal_symbol 2 //funcionando
 #define missing_value 3 //funcionando
-#define missing_semicolon 4 //falhando em comando e mais_cmd e procedure
+#define missing_semicolon 4 //funciona
 #define missing_atrib_symbol 5 // funciona
 #define missing_ident 6 // nao funciona no comando
 #define missing_END 7
@@ -480,13 +480,16 @@ void mais_cmd(char **token, char *classe, FILE *source_file, int *linha,  Linked
 		mais_cmd(token, classe, source_file, linha, simb_sincr, pilhaRegras);	
 
 	}else if(!strcmp(classe, "<END>")) {
+
 		desempilharRegra("mais_cmd", pilhaRegras);
 		return;
 		
 	}else {
 
 		erro(missing_semicolon, token, classe, source_file, linha, simb_sincr,pilhaRegras);
-	
+		comando(token, classe, source_file, linha, simb_sincr, pilhaRegras);	
+		mais_cmd(token, classe, source_file, linha, simb_sincr, pilhaRegras);	
+
 	}
 
 	desempilharRegra("mais_cmd", pilhaRegras);
