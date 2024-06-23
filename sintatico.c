@@ -13,8 +13,8 @@
 #define MAX_CLASSE_LENGHT 32
 
 //códigos de erro
-#define unexpected_code 1
-#define missing_equal_symbol 2
+#define unexpected_code 1 //funcionando
+#define missing_equal_symbol 2 //funcionando
 #define missing_value 3
 #define missing_semicolon 4
 #define missing_atrib_symbol 5
@@ -105,6 +105,7 @@ void mais_const(char **token, char *classe, FILE *source_file, int *linha,  Link
 		}else {
 
 			erro( missing_equal_symbol, token, classe, source_file, linha, simb_sincr, pilhaRegras);
+			mais_const(token, classe, source_file, linha, simb_sincr, pilhaRegras);
 
 		}
 
@@ -751,7 +752,7 @@ void analisador_sintatico(FILE* source_file) {
 
 	//se não chegou ao fim do arquivo: ERRO
 	ERRO_SINTATICO_1(linha)
-	printf("numero de linhas processadas: %d", linha);
+	printf("numero de linhas processadas: %d\n", linha);
 
 	free(token);
     free(classe);
