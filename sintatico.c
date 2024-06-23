@@ -26,6 +26,8 @@
 #define missing_expression 11
 #define missing_close_brackets 12
 #define missing_relational_op 13
+#define misssing_condition 14
+#define unexpected_ODD 15
 
 //index de cada regra no vetor "pilhaRegras"
 #define programa_index 0
@@ -291,6 +293,8 @@ void mais_termos(char **token, char *classe, FILE *source_file, int *linha,  Lin
 
 void condicao(char **token, char *classe, FILE *source_file, int *linha,  LinkedList *simb_sincr, int *pilhaRegras) {
 
+	int odd = 0;
+
 	empilharRegra("condicao", pilhaRegras);
 	empilharRegra("relacional", pilhaRegras);
 	gerarSimSincr(pilhaRegras, simb_sincr);
@@ -298,13 +302,14 @@ void condicao(char **token, char *classe, FILE *source_file, int *linha,  Linked
 	if(!strcmp(classe, "<ODD>")) {
 
 		obter_token(token, classe, source_file, linha);
-		expressao(token, classe, source_file, linha, simb_sincr, pilhaRegras);
+		odd = 1;
 
-	}else {
-
-		erro(missing_ODD, token, classe, source_file, linha, simb_sincr,pilhaRegras);
-	
 	}
+
+// odd: 0 relacional: 0 --> missing_ODD 
+// odd: 0 relacional: 1 --> ok
+// odd: 1 relacional: 0 --> ok 
+// odd: 1 relacional: 1 --> unexpected_ODD
 	
 	expressao(token, classe, source_file, linha, simb_sincr, pilhaRegras);
 	if(!strcmp(classe, "<simb_diferente>") 
@@ -313,14 +318,39 @@ void condicao(char **token, char *classe, FILE *source_file, int *linha,  Linked
 	|| !strcmp(classe, "<simb_maior>")
 	|| !strcmp(classe, "<simb_maior_igual>")) {
 
-		obter_token(token, classe, source_file, linha);
+		if(odd){
+
+			//problema
+			erro(unexpected_ODD, token, classe, source_file, linha, simb_sincr,pilhaRegras);
+			obter_token(token, classe, source_file, linha);
+			expressao(token, classe, source_file, linha, simb_sincr, pilhaRegras);
+
+		}else {
+
+			obter_token(token, classe, source_file, linha);
+			expressao(token, classe, source_file, linha, simb_sincr, pilhaRegras);
+
+		}
+
 
 	}else {
 
-		erro(missing_relational_op, token, classe, source_file, linha, simb_sincr,pilhaRegras);
+		if(!strcmp(classe, "<THEN>") || !strcmp(classe, "<DO>")) {
+			
+			if(!odd)
+				erro(missing_ODD, token, classe, source_file, linha, simb_sincr,pilhaRegras);
+
+		} else {
+			
+			if(odd)
+				erro(unexpected_ODD, token, classe, source_file, linha, simb_sincr,pilhaRegras);
+
+			erro(missing_relational_op, token, classe, source_file, linha, simb_sincr,pilhaRegras);
+			expressao(token, classe, source_file, linha, simb_sincr, pilhaRegras);
+			
+		}
 	
 	}
-	expressao(token, classe, source_file, linha, simb_sincr, pilhaRegras);
 
 	desempilharRegra("condicao", pilhaRegras);
 	desempilharRegra("relacional", pilhaRegras);
@@ -455,7 +485,6 @@ void procedimento(char **token, char *classe, FILE *source_file, int *linha,  Li
 				procedimento(token, classe, source_file, linha, simb_sincr, pilhaRegras);
 				comando(token, classe, source_file, linha, simb_sincr, pilhaRegras);
 
-				obter_token(token, classe, source_file, linha);
 				if(!strcmp(classe, "<simb_ponto_virgula>")) {
 
 					obter_token(token, classe, source_file, linha);
@@ -540,6 +569,14 @@ void printError(int codigo, char **token, char *classe, FILE *source_file, int *
 
 		case 13:
 			ERRO_SINTATICO_13 
+			break;
+
+		case 14:
+			ERRO_SINTATICO_14 
+			break;
+		
+		case 15:
+			ERRO_SINTATICO_15 
 			break;
 
 		default:

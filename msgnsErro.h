@@ -23,6 +23,8 @@
 #define ERRO_SINTATICO_10 fprintf(stderr, "alex: Erro sintatico na linha %d: cláusula 'ODD' faltando\n", *linha);
 #define ERRO_SINTATICO_11 fprintf(stderr, "alex: Erro sintatico na linha %d: expressão faltando\n", *linha);
 #define ERRO_SINTATICO_12 fprintf(stderr, "alex: Erro sintatico na linha %d: símbolo ')' faltando\n", *linha);
-#define ERRO_SINTATICO_13 fprintf(stderr, "alex: Erro sintatico na linha %d: oprador relacional faltando\n", *linha);
+#define ERRO_SINTATICO_13 fprintf(stderr, "alex: Erro sintatico na linha %d: operador relacional faltando\n", *linha);
+#define ERRO_SINTATICO_14 fprintf(stderr, "alex: Erro sintatico na linha %d: condição faltando\n", *linha);
+#define ERRO_SINTATICO_15 fprintf(stderr, "alex: Erro sintatico na linha %d: 'ODD' inesperado\n", *linha);
 
 #endif

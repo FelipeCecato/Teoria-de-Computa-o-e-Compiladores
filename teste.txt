@@ -1,4 +1,4 @@
-{ Outro programa de exemplo em PL/0 
+{ Outro programa de exemplo em PL/0 }
 
 
 CONST
@@ -9,17 +9,17 @@ VAR
 
 PROCEDURE CalculateSum;
 BEGIN
-  sum ::= 0;
+  sum := 0;
   i := min;
-  WHILE i <= max DO
+  WHILE ODD i <= max DO
   BEGIN
     sum := sum + i;
-    i := i + 1
+    i := i + 1;
   END
 END;
 
 BEGIN
-  sum@ := 0;
+  sum := 0;
   temp := max - min;
   CALL CalculateSum;
   IF sum >= temp THEN
@@ -32,10 +32,3 @@ BEGIN
       END
     END
 END.
-
-
-
-{código que não deveria existir por estar além do ponto final}
-BEGIN 
-    a := c - 4 + b;
-END
