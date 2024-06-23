@@ -27,6 +27,7 @@
 #define missing_close_brackets 12
 #define missing_relational_op 13
 
+//index de cada regra no vetor "pilhaRegras"
 #define programa_index 0
 #define bloco_index 1
 #define declaracao_index 2 
@@ -555,12 +556,14 @@ void erro(int codigo, char **token, char *classe, FILE *source_file, int *linha,
 
 void desempilharRegra(char *regra, int *pilhaRegras) {
 
+	//se a posição da regra estiver setada como 1 significa que ela está empilhada, se 0 desempilhada
 	pilhaRegras[obter_index_regra(regra)] = -1;	
 	
 }
 
 void empilharRegra(char *regra, int *pilhaRegras) {
 
+	//se a posição da regra estiver setada como 1 significa que ela está empilhada, se 0 desempilhada
 	pilhaRegras[obter_index_regra(regra)] = 1;	
 
 }
@@ -651,6 +654,7 @@ void gerarSimSincr(int *pilhaRegras,  LinkedList *simb_sincr ) {
 
 	for (int i = 0; i <= 17; i++) {
 
+		//se a regra estiver empilhada, adiciona os seguidores dela ao conjunto de simbolos de sincronismo
 		if(pilhaRegras[i]) {
 
 			for (int j = 0; followSets[i].followers[j] != NULL; j++) 
