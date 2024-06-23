@@ -52,27 +52,6 @@ void insertElement(LinkedList *list, const char *data) {
     list->head = newNode;
 }
 
-// Função para remover um elemento da lista
-void removeElement(LinkedList *list, const char *data) {
-    Node *current = list->head;
-    Node *previous = NULL;
-    while (current != NULL && strcmp(current->data, data) != 0) {
-        previous = current;
-        current = current->next;
-    }
-    if (current == NULL) {
-        fprintf(stderr, "Elemento não encontrado na lista.\n");
-        return;
-    }
-    if (previous == NULL) {
-        list->head = current->next;
-    } else {
-        previous->next = current->next;
-    }
-    free(current->data);
-    free(current);
-}
-
 // Função para remover todos os elementos da lista
 void removeAllElements(LinkedList *list) {
     Node *current = list->head;
