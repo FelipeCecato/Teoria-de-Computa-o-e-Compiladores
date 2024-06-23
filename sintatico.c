@@ -16,18 +16,21 @@
 #define unexpected_code 1 //funcionando
 #define missing_equal_symbol 2 //funcionando
 #define missing_value 3 //funcionando
-#define missing_semicolon 4 //falhando em comando e mais_cmd
+#define missing_semicolon 4 //falhando em comando e mais_cmd e procedure
 #define missing_atrib_symbol 5
-#define missing_ident 6
+#define missing_ident 6 // funciona
 #define missing_END 7
 #define missing_THEN 8 //funcionando
 #define missing_DO 9 //funcionando
 #define missing_ODD 10 //funcionando
-#define missing_expression 11
-#define missing_close_brackets 12
+#define missing_expression 11 // funciona
+#define missing_close_brackets 12 // funciona
 #define missing_relational_op 13 //funcionando
 #define missing_condition 14 //funcionando
 #define unexpected_ODD 15 //funcionando
+// Conferir se abrir parenteses e nao fechar da erro
+// Call sem ponto-virgula da problema
+
 
 //index de cada regra no vetor "pilhaRegras"
 #define programa_index 0
@@ -167,6 +170,10 @@ void mais_var(char **token, char *classe, FILE *source_file, int *linha,  Linked
 	}else {
 
 		erro(missing_ident, token, classe, source_file, linha, simb_sincr,pilhaRegras);
+		if(!strcmp(classe, "<simb_ponto_virgula>")) {
+			return;
+		}
+		mais_var(token, classe, source_file, linha, simb_sincr, pilhaRegras);
 
 	}
 
@@ -474,6 +481,14 @@ void mais_cmd(char **token, char *classe, FILE *source_file, int *linha,  Linked
 
 }
 
+void analisa_procedimento(char **token, char *classe, FILE *source_file, int *linha,  LinkedList *simb_sincr, int *pilhaRegras) {
+	obter_token(token, classe, source_file, linha);
+	constante(token, classe, source_file, linha, simb_sincr, pilhaRegras);
+	variavel(token, classe, source_file, linha, simb_sincr, pilhaRegras);
+	procedimento(token, classe, source_file, linha, simb_sincr, pilhaRegras);
+	comando(token, classe, source_file, linha, simb_sincr, pilhaRegras);
+}
+
 void procedimento(char **token, char *classe, FILE *source_file, int *linha,  LinkedList *simb_sincr, int *pilhaRegras) {
 
 	empilharRegra("procedimento", pilhaRegras);
@@ -486,12 +501,8 @@ void procedimento(char **token, char *classe, FILE *source_file, int *linha,  Li
 
 			obter_token(token, classe, source_file, linha);
 			if(!strcmp(classe, "<simb_ponto_virgula>")) {
-
-				obter_token(token, classe, source_file, linha);
-				constante(token, classe, source_file, linha, simb_sincr, pilhaRegras);
-				variavel(token, classe, source_file, linha, simb_sincr, pilhaRegras);
-				procedimento(token, classe, source_file, linha, simb_sincr, pilhaRegras);
-				comando(token, classe, source_file, linha, simb_sincr, pilhaRegras);
+				
+				analisa_procedimento(token, classe, source_file, linha, simb_sincr, pilhaRegras);
 
 				if(!strcmp(classe, "<simb_ponto_virgula>")) {
 
@@ -514,7 +525,24 @@ void procedimento(char **token, char *classe, FILE *source_file, int *linha,  Li
 		}else {
 
 			erro(missing_ident, token, classe, source_file, linha, simb_sincr,pilhaRegras);
+			if(!strcmp(classe, "<simb_ponto_virgula>")) {
 
+				analisa_procedimento(token, classe, source_file, linha, simb_sincr, pilhaRegras);
+
+				if(!strcmp(classe, "<simb_ponto_virgula>")) {
+
+					obter_token(token, classe, source_file, linha);
+					procedimento(token, classe, source_file, linha, simb_sincr, pilhaRegras);
+
+				}else {
+
+					erro(missing_semicolon, token, classe, source_file, linha, simb_sincr,pilhaRegras);
+
+				}
+
+			}
+
+			
 		}
 
 	} 
