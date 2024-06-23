@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include "msgnsErro.h"
 #include "automato.h"
-#include "listas_encadeadas_simples/simple_linked_list.h"
 
 #define true 1
 #define false 0

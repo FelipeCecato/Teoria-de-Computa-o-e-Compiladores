@@ -12,6 +12,21 @@
 #include "lista.h"
 #define MAX_CLASSE_LENGHT 32
 
+//códigos de erro
+#define unexpected_code 1
+#define missing_equal_symbol 2
+#define missing_value 3
+#define missing_semicolon 4
+#define missing_atrib_symbol 5
+#define missing_ident 6
+#define missing_END 7
+#define missing_THEN 8
+#define missing_DO 9
+#define missing_ODD 10
+#define missing_expression 11
+#define missing_close_brackets 12
+#define missing_relational_op 13
+
 #define programa_index 0
 #define bloco_index 1
 #define declaracao_index 2 
@@ -57,7 +72,7 @@ void obter_token(char **token, char *classe, FILE *source_file, int *linha) {
 
 }
 
-void mais_const(char **token, char *classe, FILE *source_file, int *linha, LinkedList *simb_sincr, int *pilhaRegras) {
+void mais_const(char **token, char *classe, FILE *source_file, int *linha,  LinkedList *simb_sincr, int *pilhaRegras) {
 
 	empilharRegra("mais_const", pilhaRegras);
 	gerarSimSincr(pilhaRegras, simb_sincr);
@@ -78,15 +93,29 @@ void mais_const(char **token, char *classe, FILE *source_file, int *linha, Linke
 
 				} 
 				
+			}else {
+
+			erro( missing_value, token, classe, source_file, linha, simb_sincr, pilhaRegras);
+
 			}
+
+		}else {
+
+			erro( missing_equal_symbol, token, classe, source_file, linha, simb_sincr, pilhaRegras);
+
 		}
+
+	}else {
+
+		erro(missing_ident, token, classe, source_file, linha, simb_sincr,pilhaRegras);
+
 	}
 
-	desempilharRegra(pilhaRegras);
+	desempilharRegra("mais_const", pilhaRegras);
 
 }
 
-void constante(char **token, char *classe, FILE *source_file, int *linha, LinkedList *simb_sincr, int *pilhaRegras) {
+void constante(char **token, char *classe, FILE *source_file, int *linha,  LinkedList *simb_sincr, int *pilhaRegras) {
 
 	empilharRegra("constante", pilhaRegras);
 	gerarSimSincr(pilhaRegras, simb_sincr);
@@ -98,14 +127,18 @@ void constante(char **token, char *classe, FILE *source_file, int *linha, Linked
 
 			obter_token(token, classe, source_file, linha);
 			
+		} else {
+
+			erro(missing_semicolon, token, classe, source_file, linha, simb_sincr,pilhaRegras);
+
 		}
 		
 	}
-	desempilharRegra(pilhaRegras);
+	desempilharRegra("constante", pilhaRegras);
 		
 }
 
-void mais_var(char **token, char *classe, FILE *source_file, int *linha, LinkedList *simb_sincr, int *pilhaRegras) {
+void mais_var(char **token, char *classe, FILE *source_file, int *linha,  LinkedList *simb_sincr, int *pilhaRegras) {
 
 	empilharRegra("mais_var", pilhaRegras);
 	gerarSimSincr(pilhaRegras, simb_sincr);
@@ -122,13 +155,17 @@ void mais_var(char **token, char *classe, FILE *source_file, int *linha, LinkedL
 			
 		
 		
+	}else {
+
+		erro(missing_ident, token, classe, source_file, linha, simb_sincr,pilhaRegras);
+
 	}
 
-	desempilharRegra(pilhaRegras);
+	desempilharRegra("mais_var", pilhaRegras);
 
 }
 
-void variavel(char **token, char *classe, FILE *source_file, int *linha, LinkedList *simb_sincr, int *pilhaRegras) {
+void variavel(char **token, char *classe, FILE *source_file, int *linha,  LinkedList *simb_sincr, int *pilhaRegras) {
 
 	empilharRegra("variavel", pilhaRegras);
 	gerarSimSincr(pilhaRegras, simb_sincr);
@@ -144,15 +181,19 @@ void variavel(char **token, char *classe, FILE *source_file, int *linha, LinkedL
 
 			}
 			
+		}else {
+
+			erro(missing_semicolon, token, classe, source_file, linha, simb_sincr,pilhaRegras);
+
 		}
 		
 	}
 
-	desempilharRegra(pilhaRegras);
+	desempilharRegra("variavel", pilhaRegras);
 
 }
 
-void expressao(char **token, char *classe, FILE *source_file, int *linha, LinkedList *simb_sincr, int *pilhaRegras) {
+void expressao(char **token, char *classe, FILE *source_file, int *linha,  LinkedList *simb_sincr, int *pilhaRegras) {
 
 	empilharRegra("expressao", pilhaRegras);
 	empilharRegra("operador_unario", pilhaRegras);
@@ -168,13 +209,13 @@ void expressao(char **token, char *classe, FILE *source_file, int *linha, Linked
 	mais_fatores(token, classe, source_file, linha, simb_sincr, pilhaRegras);
 	mais_termos(token, classe, source_file, linha, simb_sincr, pilhaRegras);
 
-	desempilharRegra(pilhaRegras);
-	desempilharRegra(pilhaRegras);
-	desempilharRegra(pilhaRegras);
+	desempilharRegra("expressao", pilhaRegras);
+	desempilharRegra("operador_unario", pilhaRegras);
+	desempilharRegra("termo", pilhaRegras);
 
 }
 
-void fator(char **token, char *classe, FILE *source_file, int *linha, LinkedList *simb_sincr, int *pilhaRegras) {
+void fator(char **token, char *classe, FILE *source_file, int *linha,  LinkedList *simb_sincr, int *pilhaRegras) {
 
 	empilharRegra("fator", pilhaRegras);
 	gerarSimSincr(pilhaRegras, simb_sincr);
@@ -187,28 +228,30 @@ void fator(char **token, char *classe, FILE *source_file, int *linha, LinkedList
 
 		obter_token(token, classe, source_file, linha);
 
-	}else if(!strcmp(classe, "<identificador>")) {
+	}else if(!strcmp(classe, "<abre_parenteses>")) {
 
 		obter_token(token, classe, source_file, linha);
-		if(!strcmp(classe, "<abre_parenteses>")) {
-
+		expressao(token, classe, source_file, linha, simb_sincr, pilhaRegras);
+		if(!strcmp(classe, "<fecha_parenteses>")) {
+		
 			obter_token(token, classe, source_file, linha);
-			expressao(token, classe, source_file, linha, simb_sincr, pilhaRegras);
-			if(!strcmp(classe, "<fecha_parenteses>")) {
+		
+		}else {
 
-				obter_token(token, classe, source_file, linha);
-
-			}
+			erro(missing_close_brackets, token, classe, source_file, linha, simb_sincr,pilhaRegras);
 
 		}
 		
-	}
+	}else {
 
-	desempilharRegra(pilhaRegras);
+		erro(missing_expression, token, classe, source_file, linha, simb_sincr,pilhaRegras);
+	
+	}
+	desempilharRegra("fator", pilhaRegras);
 
 }
 
-void mais_fatores(char **token, char *classe, FILE *source_file, int *linha, LinkedList *simb_sincr, int *pilhaRegras) {
+void mais_fatores(char **token, char *classe, FILE *source_file, int *linha,  LinkedList *simb_sincr, int *pilhaRegras) {
 
 	empilharRegra("mais_fatores", pilhaRegras);
 	gerarSimSincr(pilhaRegras, simb_sincr);
@@ -221,11 +264,11 @@ void mais_fatores(char **token, char *classe, FILE *source_file, int *linha, Lin
 
 	}
 
-	desempilharRegra(pilhaRegras);
+	desempilharRegra("mais_fatores", pilhaRegras);
 
 }
 
-void mais_termos(char **token, char *classe, FILE *source_file, int *linha, LinkedList *simb_sincr, int *pilhaRegras) {
+void mais_termos(char **token, char *classe, FILE *source_file, int *linha,  LinkedList *simb_sincr, int *pilhaRegras) {
 
 	empilharRegra("mais_termos", pilhaRegras);
 	empilharRegra("termo", pilhaRegras);
@@ -240,12 +283,12 @@ void mais_termos(char **token, char *classe, FILE *source_file, int *linha, Link
 
 	}
 
-	desempilharRegra(pilhaRegras);
-	desempilharRegra(pilhaRegras);
+	desempilharRegra("mais_termos", pilhaRegras);
+	desempilharRegra("termo", pilhaRegras);
 
 }
 
-void condicao(char **token, char *classe, FILE *source_file, int *linha, LinkedList *simb_sincr, int *pilhaRegras) {
+void condicao(char **token, char *classe, FILE *source_file, int *linha,  LinkedList *simb_sincr, int *pilhaRegras) {
 
 	empilharRegra("condicao", pilhaRegras);
 	empilharRegra("relacional", pilhaRegras);
@@ -256,8 +299,12 @@ void condicao(char **token, char *classe, FILE *source_file, int *linha, LinkedL
 		obter_token(token, classe, source_file, linha);
 		expressao(token, classe, source_file, linha, simb_sincr, pilhaRegras);
 
-	}
+	}else {
 
+		erro(missing_ODD, token, classe, source_file, linha, simb_sincr,pilhaRegras);
+	
+	}
+	
 	expressao(token, classe, source_file, linha, simb_sincr, pilhaRegras);
 	if(!strcmp(classe, "<simb_diferente>") 
 	|| !strcmp(classe, "<simb_menor>")
@@ -267,15 +314,19 @@ void condicao(char **token, char *classe, FILE *source_file, int *linha, LinkedL
 
 		obter_token(token, classe, source_file, linha);
 
+	}else {
+
+		erro(missing_relational_op, token, classe, source_file, linha, simb_sincr,pilhaRegras);
+	
 	}
 	expressao(token, classe, source_file, linha, simb_sincr, pilhaRegras);
 
-	desempilharRegra(pilhaRegras);
-	desempilharRegra(pilhaRegras);
+	desempilharRegra("condicao", pilhaRegras);
+	desempilharRegra("relacional", pilhaRegras);
 
 }
 
-void comando(char **token, char *classe, FILE *source_file, int *linha, LinkedList *simb_sincr, int *pilhaRegras) {
+void comando(char **token, char *classe, FILE *source_file, int *linha,  LinkedList *simb_sincr, int *pilhaRegras) {
 
 	empilharRegra("comando", pilhaRegras);
 	gerarSimSincr(pilhaRegras, simb_sincr);
@@ -288,6 +339,10 @@ void comando(char **token, char *classe, FILE *source_file, int *linha, LinkedLi
 			obter_token(token, classe, source_file, linha);
 			expressao(token, classe, source_file, linha, simb_sincr, pilhaRegras);
 
+		}else {
+
+			erro(missing_atrib_symbol, token, classe, source_file, linha, simb_sincr,pilhaRegras);
+
 		}
 
 	}else if(!strcmp(classe, "<CALL>")) {
@@ -296,6 +351,10 @@ void comando(char **token, char *classe, FILE *source_file, int *linha, LinkedLi
 		if(!strcmp(classe, "<identificador>")) {
 
 			obter_token(token, classe, source_file, linha);
+
+		}else {
+
+			erro(missing_ident, token, classe, source_file, linha, simb_sincr,pilhaRegras);
 
 		}
 
@@ -307,6 +366,10 @@ void comando(char **token, char *classe, FILE *source_file, int *linha, LinkedLi
 		if(!strcmp(classe, "<END>")) {
 
 			obter_token(token, classe, source_file, linha);
+
+		}else {
+
+			erro(missing_END, token, classe, source_file, linha, simb_sincr,pilhaRegras);
 
 		}
 		
@@ -320,6 +383,10 @@ void comando(char **token, char *classe, FILE *source_file, int *linha, LinkedLi
 			obter_token(token, classe, source_file, linha);
 			comando(token, classe, source_file, linha, simb_sincr, pilhaRegras);
 
+		}else {
+
+			erro(missing_THEN, token, classe, source_file, linha, simb_sincr,pilhaRegras);
+
 		}
 
 	}else if(!strcmp(classe, "<WHILE>")) {
@@ -331,15 +398,19 @@ void comando(char **token, char *classe, FILE *source_file, int *linha, LinkedLi
 			obter_token(token, classe, source_file, linha);
 			comando(token, classe, source_file, linha, simb_sincr, pilhaRegras);
 			
+		}else {
+
+			erro(missing_DO, token, classe, source_file, linha, simb_sincr,pilhaRegras);
+
 		}
 
 	}
 
-	desempilharRegra(pilhaRegras);
+	desempilharRegra("comando", pilhaRegras);
 
 }
 
-void mais_cmd(char **token, char *classe, FILE *source_file, int *linha, LinkedList *simb_sincr, int *pilhaRegras) {
+void mais_cmd(char **token, char *classe, FILE *source_file, int *linha,  LinkedList *simb_sincr, int *pilhaRegras) {
 
 	empilharRegra("mais_cmd", pilhaRegras);
 	gerarSimSincr(pilhaRegras, simb_sincr);
@@ -350,13 +421,17 @@ void mais_cmd(char **token, char *classe, FILE *source_file, int *linha, LinkedL
 		comando(token, classe, source_file, linha, simb_sincr, pilhaRegras);	
 		mais_cmd(token, classe, source_file, linha, simb_sincr, pilhaRegras);	
 
+	}else {
+
+		erro(missing_semicolon, token, classe, source_file, linha, simb_sincr,pilhaRegras);
+	
 	}
 
-	desempilharRegra(pilhaRegras);
+	desempilharRegra("mais_cmd", pilhaRegras);
 
 }
 
-void procedimento(char **token, char *classe, FILE *source_file, int *linha, LinkedList *simb_sincr, int *pilhaRegras) {
+void procedimento(char **token, char *classe, FILE *source_file, int *linha,  LinkedList *simb_sincr, int *pilhaRegras) {
 
 	empilharRegra("procedimento", pilhaRegras);
 	gerarSimSincr(pilhaRegras, simb_sincr);
@@ -381,24 +456,85 @@ void procedimento(char **token, char *classe, FILE *source_file, int *linha, Lin
 					obter_token(token, classe, source_file, linha);
 					procedimento(token, classe, source_file, linha, simb_sincr, pilhaRegras);
 
+				}else {
+
+					erro(missing_semicolon, token, classe, source_file, linha, simb_sincr,pilhaRegras);
+
 				}
+
+			}else {
+
+				erro(missing_semicolon, token, classe, source_file, linha, simb_sincr,pilhaRegras);
+
 			}
 
+
+		}else {
+
+			erro(missing_ident, token, classe, source_file, linha, simb_sincr,pilhaRegras);
 
 		}
 
 	} 
 
-	desempilharRegra(pilhaRegras);
+	desempilharRegra("procedimento", pilhaRegras);
 
 }
 
-void printError(int codigo, char **token, char *classe, FILE *source_file, int *linha, LinkedList *simb_sincr, int *pilhaRegras){
+void printError(int codigo, char **token, char *classe, FILE *source_file, int *linha,  LinkedList *simb_sincr, int *pilhaRegras){
 
 	switch (codigo)	{
 
 		case 1:
-			ERRO_SINTATICO_1
+			ERRO_SINTATICO_1(*linha)
+			break;
+		
+		case 2:
+			ERRO_SINTATICO_2
+			break;
+
+		case 3:
+			ERRO_SINTATICO_3 
+			break;
+
+		case 4:
+			ERRO_SINTATICO_4 
+			break;
+
+		case 5:
+			ERRO_SINTATICO_5 
+			break;
+
+		case 6:
+			ERRO_SINTATICO_6 
+			break;
+
+		case 7:
+			ERRO_SINTATICO_7 
+			break;
+
+		case 8:
+			ERRO_SINTATICO_8 
+			break;
+
+		case 9:
+			ERRO_SINTATICO_9 
+			break;
+					
+		case 10:
+			ERRO_SINTATICO_10 
+			break;
+
+		case 11:
+			ERRO_SINTATICO_11 
+			break;
+
+		case 12:
+			ERRO_SINTATICO_12 
+			break;
+
+		case 13:
+			ERRO_SINTATICO_13 
 			break;
 
 		default:
@@ -408,7 +544,7 @@ void printError(int codigo, char **token, char *classe, FILE *source_file, int *
 
 }
 
-void erro(int codigo, char **token, char *classe, FILE *source_file, int *linha, LinkedList *simb_sincr, int *pilhaRegras) {
+void erro(int codigo, char **token, char *classe, FILE *source_file, int *linha,  LinkedList *simb_sincr, int *pilhaRegras) {
 
 	printError(codigo, token, classe, source_file, linha, simb_sincr, pilhaRegras);
 
@@ -417,83 +553,77 @@ void erro(int codigo, char **token, char *classe, FILE *source_file, int *linha,
 
 }
 
-void desempilharRegra(int *pilhaRegras) {
+void desempilharRegra(char *regra, int *pilhaRegras) {
 
-	int i = 0;
-	while (pilhaRegras != -1)
-		i++;
-
-	pilhaRegras[i-1] = -1;	
+	pilhaRegras[obter_index_regra(regra)] = -1;	
 	
 }
 
 void empilharRegra(char *regra, int *pilhaRegras) {
 
-	int regra_index = 0;
-
-	if(!strcmp("programa", regra)) 
-		regra_index = programa_index;
-
-	else if(!strcmp("bloco", regra)) 	
-		regra_index = bloco_index;
-
-	else if(!strcmp("declaracao", regra)) 	
-		regra_index = declaracao_index;
-
-	else if(!strcmp("constante", regra)) 	
-		regra_index = constante_index;
-
-	else if(!strcmp("mais_const", regra)) 	
-		regra_index = mais_const_index;
-
-	else if(!strcmp("variavel", regra)) 	
-		regra_index = variavel_index;
-
-	else if(!strcmp("mais_var", regra)) 	
-		regra_index = mais_var_index;
-
-	else if(!strcmp("procedimento", regra)) 	
-		regra_index = procedimento_index;
-
-	else if(!strcmp("comando", regra)) 	
-		regra_index = comando_index;
-
-	else if(!strcmp("mais_cmd", regra)) 	
-		regra_index = mais_cmd_index;
-
-	else if(!strcmp("expressao", regra)) 	
-		regra_index = expressao_index;
-
-	else if(!strcmp("operador_unario", regra)) 	
-		regra_index = operador_unario_index;
-
-	else if(!strcmp("termo", regra)) 	
-		regra_index = termo_index;
-
-	else if(!strcmp("mais_termos", regra)) 	
-		regra_index = mais_termos_index;
-
-	else if(!strcmp("fator", regra)) 	
-		regra_index = fator_index;
-
-	else if(!strcmp("mais_fatores", regra)) 	
-		regra_index = mais_fatores_index;
-
-	else if(!strcmp("condicao", regra)) 	
-		regra_index = condicao_index;
-
-	else if(!strcmp("relacional", regra))
-		regra_index = relacional_index;
-
-	int i = 0;
-	while (pilhaRegras != -1)
-		i++;
-
-	pilhaRegras[i] = regra_index;	
+	pilhaRegras[obter_index_regra(regra)] = 1;	
 
 }
 
-void gerarSimSincr(int *pilhaRegras, LinkedList *simb_sincr ) {
+int obter_index_regra(char *regra) {
+
+	if(!strcmp("programa", regra)) 
+		return programa_index;
+
+	else if(!strcmp("bloco", regra)) 	
+		return bloco_index;
+
+	else if(!strcmp("declaracao", regra)) 	
+		return declaracao_index;
+
+	else if(!strcmp("constante", regra)) 	
+		return constante_index;
+
+	else if(!strcmp("mais_const", regra)) 	
+		return mais_const_index;
+
+	else if(!strcmp("variavel", regra)) 	
+		return variavel_index;
+
+	else if(!strcmp("mais_var", regra)) 	
+		return mais_var_index;
+
+	else if(!strcmp("procedimento", regra)) 	
+		return procedimento_index;
+
+	else if(!strcmp("comando", regra)) 	
+		return comando_index;
+
+	else if(!strcmp("mais_cmd", regra)) 	
+		return mais_cmd_index;
+
+	else if(!strcmp("expressao", regra)) 	
+		return expressao_index;
+
+	else if(!strcmp("operador_unario", regra)) 	
+		return operador_unario_index;
+
+	else if(!strcmp("termo", regra)) 	
+		return termo_index;
+
+	else if(!strcmp("mais_termos", regra)) 	
+		return mais_termos_index;
+
+	else if(!strcmp("fator", regra)) 	
+		return fator_index;
+
+	else if(!strcmp("mais_fatores", regra)) 	
+		return mais_fatores_index;
+
+	else if(!strcmp("condicao", regra)) 	
+		return condicao_index;
+
+	else if(!strcmp("relacional", regra))
+		return relacional_index;
+
+}
+
+void gerarSimSincr(int *pilhaRegras,  LinkedList *simb_sincr ) {
 
 	removeAllElements(simb_sincr);
 
@@ -519,10 +649,14 @@ void gerarSimSincr(int *pilhaRegras, LinkedList *simb_sincr ) {
         {"<relacional>", {"-", "+", "ident", "numero", "(", NULL}}
     };
 
-	for (int i = 0; pilhaRegras[i] != -1; i++) {
+	for (int i = 0; i <= 17; i++) {
 
-		for (int j = 0; followSets[i].followers[j] != NULL; j++) 
-			insertElement(simb_sincr, followSets[i].followers[j]);
+		if(pilhaRegras[i]) {
+
+			for (int j = 0; followSets[i].followers[j] != NULL; j++) 
+				insertElement(simb_sincr, followSets[i].followers[j]);
+
+		}
 
 	}
 	
@@ -531,7 +665,7 @@ void gerarSimSincr(int *pilhaRegras, LinkedList *simb_sincr ) {
 void analisador_sintatico(FILE* source_file) {
 
 	int linha = 0;
-	int pilhaRegras[18] = {-1};
+	int pilhaRegras[18] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 	char *token;
     token = malloc(sizeof(char));
@@ -548,19 +682,18 @@ void analisador_sintatico(FILE* source_file) {
         exit(-1);//encerra o programa 
     }
 
-	LinkedList *simb_sincr;
-    initializeList(simb_sincr);
-	printList(simb_sincr);
+	LinkedList simb_sincr;
+    initializeList(&simb_sincr);
 
 	empilharRegra("programa", pilhaRegras);
 	empilharRegra("bloco", pilhaRegras);
 	empilharRegra("declaracao", pilhaRegras);
 	obter_token(&token, classe, source_file,  &linha);
-	constante(&token, classe, source_file,  &linha, simb_sincr, pilhaRegras);
-	variavel(&token, classe, source_file,  &linha, simb_sincr, pilhaRegras);
-	procedimento(&token, classe, source_file,  &linha, simb_sincr, pilhaRegras);
-	desempilharRegra(pilhaRegras);
-	comando(&token, classe, source_file,  &linha, simb_sincr, pilhaRegras);
+	constante(&token, classe, source_file,  &linha, &simb_sincr, pilhaRegras);
+	variavel(&token, classe, source_file,  &linha, &simb_sincr, pilhaRegras);
+	procedimento(&token, classe, source_file,  &linha, &simb_sincr, pilhaRegras);
+	desempilharRegra("declaracao", pilhaRegras);
+	comando(&token, classe, source_file,  &linha, &simb_sincr, pilhaRegras);
 
 	//verifica se chegou ao fim do arquivo
 	if(automato(&token, classe, source_file, &linha)) {
@@ -572,8 +705,8 @@ void analisador_sintatico(FILE* source_file) {
 	}
 
 	//se não chegou ao fim do arquivo: ERRO
-	ERRO_SINTATICO_1
-	
+	ERRO_SINTATICO_1(linha)
+	printf("numero de linhas processadas: %d", linha);
 
 	free(token);
     free(classe);

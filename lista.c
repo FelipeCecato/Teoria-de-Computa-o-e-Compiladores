@@ -30,6 +30,18 @@ Node* createNode(const char *data) {
     return newNode;
 }
 
+// Função para verificar se um elemento está na lista
+int containsElement(LinkedList *list, const char *data) {
+    Node *current = list->head;
+    while (current != NULL) {
+        if (strcmp(current->data, data) == 0) {
+            return 1; // Elemento encontrado
+        }
+        current = current->next;
+    }
+    return 0; // Elemento não encontrado
+}
+
 // Função para inserir um novo elemento na lista
 void insertElement(LinkedList *list, const char *data) {
     if (containsElement(list, data)) {
@@ -59,18 +71,6 @@ void removeElement(LinkedList *list, const char *data) {
     }
     free(current->data);
     free(current);
-}
-
-// Função para verificar se um elemento está na lista
-int containsElement(LinkedList *list, const char *data) {
-    Node *current = list->head;
-    while (current != NULL) {
-        if (strcmp(current->data, data) == 0) {
-            return 1; // Elemento encontrado
-        }
-        current = current->next;
-    }
-    return 0; // Elemento não encontrado
 }
 
 // Função para remover todos os elementos da lista
