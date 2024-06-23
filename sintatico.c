@@ -20,8 +20,8 @@
 #define missing_atrib_symbol 5
 #define missing_ident 6
 #define missing_END 7
-#define missing_THEN 8
-#define missing_DO 9
+#define missing_THEN 8 //funcionando
+#define missing_DO 9 //funcionando
 #define missing_ODD 10 //funcionando
 #define missing_expression 11
 #define missing_close_brackets 12
@@ -419,6 +419,7 @@ void comando(char **token, char *classe, FILE *source_file, int *linha,  LinkedL
 		}else {
 
 			erro(missing_THEN, token, classe, source_file, linha, simb_sincr,pilhaRegras);
+			comando(token, classe, source_file, linha, simb_sincr, pilhaRegras);
 
 		}
 
@@ -434,6 +435,7 @@ void comando(char **token, char *classe, FILE *source_file, int *linha,  LinkedL
 		}else {
 
 			erro(missing_DO, token, classe, source_file, linha, simb_sincr,pilhaRegras);
+			comando(token, classe, source_file, linha, simb_sincr, pilhaRegras);
 
 		}
 
@@ -747,6 +749,7 @@ void analisador_sintatico(FILE* source_file) {
 
 		free(token);
     	free(classe);
+		printf("numero de linhas processadas: %d\n", linha);
 		return;
 
 	}
