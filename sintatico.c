@@ -99,6 +99,7 @@ void mais_const(char **token, char *classe, FILE *source_file, int *linha,  Link
 			}else {
 
 				erro( missing_value, token, classe, source_file, linha, simb_sincr, pilhaRegras);
+				mais_const(token, classe, source_file, linha, simb_sincr, pilhaRegras);
 
 			}
 

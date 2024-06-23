@@ -13,7 +13,7 @@
 #define ERRO_LEXICO_3  fprintf(stderr, "alex: Erro lexico na linha %d: caractere invalido '%s'\n", *linha, *token);
 #define ERRO_SINTATICO_1(linha)  fprintf(stderr, "alex: Erro sintatico na linha %d: código inesperado após o fim do programa\n", linha);
 #define ERRO_SINTATICO_2 fprintf(stderr, "alex: Erro sintatico na linha %d: símbolo '=' faltando\n", *linha);
-#define ERRO_SINTATICO_3 fprintf(stderr, "alex: Erro sintatico na linha %d: valor da contante faltando\n", *linha);
+#define ERRO_SINTATICO_3 fprintf(stderr, "alex: Erro sintatico na linha %d: valor da constante faltando\n", *linha);
 #define ERRO_SINTATICO_4 fprintf(stderr, "alex: Erro sintatico na linha %d: símbolo ';' faltando\n", *linha);
 #define ERRO_SINTATICO_5 fprintf(stderr, "alex: Erro sintatico na linha %d: símbolo ':=' faltando\n", *linha);
 #define ERRO_SINTATICO_6 fprintf(stderr, "alex: Erro sintatico na linha %d: identificador faltando\n", *linha);
