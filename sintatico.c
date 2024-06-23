@@ -16,7 +16,7 @@
 #define unexpected_code 1 //funcionando
 #define missing_equal_symbol 2 //funcionando
 #define missing_value 3 //funcionando
-#define missing_semicolon 4
+#define missing_semicolon 4 //falhando em comando e mais_cmd
 #define missing_atrib_symbol 5
 #define missing_ident 6
 #define missing_END 7
