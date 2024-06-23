@@ -422,6 +422,10 @@ void mais_cmd(char **token, char *classe, FILE *source_file, int *linha,  Linked
 		comando(token, classe, source_file, linha, simb_sincr, pilhaRegras);	
 		mais_cmd(token, classe, source_file, linha, simb_sincr, pilhaRegras);	
 
+	}else if(!strcmp(classe, "<END>")){
+
+		return;
+		
 	}else {
 
 		erro(missing_semicolon, token, classe, source_file, linha, simb_sincr,pilhaRegras);

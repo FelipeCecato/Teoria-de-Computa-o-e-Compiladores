@@ -14,7 +14,7 @@ BEGIN
   WHILE i <= max DO
   BEGIN
     sum := sum + i;
-    i := i + 1;
+    i := i + 1
   END
 END;
 
@@ -28,7 +28,7 @@ BEGIN
       WHILE i > 0 DO
       BEGIN
         sum := sum + i;
-        i := i - 1;
+        i := i - 1
       END
     END
 END.
