@@ -106,6 +106,9 @@ void mais_const(char **token, char *classe, FILE *source_file, int *linha,  Link
 		}else {
 
 			erro( missing_equal_symbol, token, classe, source_file, linha, simb_sincr, pilhaRegras);
+			if(!strcmp(classe, "<simb_ponto_virgula>")) {
+			return;
+			}
 			mais_const(token, classe, source_file, linha, simb_sincr, pilhaRegras);
 
 		}
