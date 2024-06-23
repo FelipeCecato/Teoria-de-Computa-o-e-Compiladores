@@ -15,19 +15,19 @@
 //códigos de erro
 #define unexpected_code 1 //funcionando
 #define missing_equal_symbol 2 //funcionando
-#define missing_value 3
+#define missing_value 3 //funcionando
 #define missing_semicolon 4
 #define missing_atrib_symbol 5
 #define missing_ident 6
 #define missing_END 7
 #define missing_THEN 8
 #define missing_DO 9
-#define missing_ODD 10
+#define missing_ODD 10 //funcionando
 #define missing_expression 11
 #define missing_close_brackets 12
-#define missing_relational_op 13
+#define missing_relational_op 13 //funcionando
 #define misssing_condition 14
-#define unexpected_ODD 15
+#define unexpected_ODD 15 //funcionando
 
 //index de cada regra no vetor "pilhaRegras"
 #define programa_index 0
