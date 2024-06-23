@@ -98,7 +98,7 @@ void mais_const(char **token, char *classe, FILE *source_file, int *linha,  Link
 				
 			}else {
 
-			erro( missing_value, token, classe, source_file, linha, simb_sincr, pilhaRegras);
+				erro( missing_value, token, classe, source_file, linha, simb_sincr, pilhaRegras);
 
 			}
 
@@ -322,7 +322,7 @@ void condicao(char **token, char *classe, FILE *source_file, int *linha,  Linked
 
 			//problema
 			erro(unexpected_ODD, token, classe, source_file, linha, simb_sincr,pilhaRegras);
-			obter_token(token, classe, source_file, linha);
+			//obter_token(token, classe, source_file, linha);
 			expressao(token, classe, source_file, linha, simb_sincr, pilhaRegras);
 
 		}else {
@@ -590,7 +590,7 @@ void erro(int codigo, char **token, char *classe, FILE *source_file, int *linha,
 
 	printError(codigo, token, classe, source_file, linha, simb_sincr, pilhaRegras);
 
-	while(containsElement(simb_sincr, classe)) 
+	while(!containsElement(simb_sincr, classe)) 
 		obter_token(token, classe, source_file, linha);
 
 }
@@ -674,23 +674,23 @@ void gerarSimSincr(int *pilhaRegras,  LinkedList *simb_sincr ) {
 	// ? representa o λ
 	const FollowSet followSets[] = {
         {"<programa>", {"$", NULL}},
-        {"<bloco>", {".", NULL}},
-        {"<declaracao>", {"ident", "CALL", "BEGIN", "IF", "WHILE", "?", NULL}},
-        {"<constante>", {"VAR", "PROCEDURE", "ident", "CALL", "BEGIN", "IF", "WHILE", "?", NULL}},
-        {"<mais_const>", {";", NULL}},
-        {"<variavel>", {"PROCEDURE", "ident", "CALL", "BEGIN", "IF", "WHILE", "?", NULL}},
-        {"<mais_var>", {";", NULL}},
-        {"<procedimento>", {"ident", "CALL", "BEGIN", "IF", "WHILE", "?", NULL}},
-        {"<comando>", {"END", ";", NULL}},
-        {"<mais_cmd>", {"END", NULL}},
-        {"<expressao>", {"THEN", "DO", ")", ";", NULL}},
-        {"<operador_unario>", {"ident", "numero", "(", NULL}},
-        {"<termo>", {"-", "+", "THEN", "DO", ")", ";", NULL}},
-        {"<mais_termos>", {"THEN", "DO", ")", ";", NULL}},
-        {"<fator>", {"*", "/", "-", "+", "THEN", "DO", ")", ";", NULL}},
-        {"<mais_fatores>", {"-", "+", "THEN", "DO", ")", ";", NULL}},
-        {"<condicao>", {"THEN", "DO", NULL}},
-        {"<relacional>", {"-", "+", "ident", "numero", "(", NULL}}
+        {"<bloco>", {"<simb_ponto>", NULL}},
+        {"<declaracao>", {"<identificador>", "<CALL>", "<BEGIN>", "<IF>", "<WHILE>", "?", NULL}},
+        {"<constante>", {"<VAR>", "<PROCEDURE>", "<identificador>", "<CALL>", "<BEGIN>", "<IF>", "<WHILE>", "?", NULL}},
+        {"<mais_const>", {"<simb_ponto_virgula>", NULL}},
+        {"<variavel>", {"<PROCEDURE>", "<identificador>", "<CALL>", "<BEGIN>", "<IF>", "<WHILE>", "?", NULL}},
+        {"<mais_var>", {"<simb_ponto_virgula>", NULL}},
+        {"<procedimento>", {"<identificador>", "<CALL>", "<BEGIN>", "<IF>", "<WHILE>", "?", NULL}},
+        {"<comando>", {"<END>", "<simb_ponto_virgula>", NULL}},
+        {"<mais_cmd>", {"<END>", NULL}},
+        {"<expressao>", {"<THEN>", "<DO>", "<fecha_parenteses>", "<simb_ponto_virgula>", NULL}},
+        {"<operador_unario>", {"<identificador>", "<numero>", "<abre_parenteses>", NULL}},
+        {"<termo>", {"<simb_subtracao>", "<simb_soma>", "<THEN>", "<DO>", "<fecha_parenteses>", "<simb_ponto_virgula>", NULL}},
+        {"<mais_termos>", {"<THEN>", "<DO>", "<fecha_parenteses>", "<simb_ponto_virgula>", NULL}},
+        {"<fator>", {"<simb_multiplicacao>", "<simb_divisao>", "<simb_subtracao>", "<simb_soma>", "<THEN>", "<DO>", "<fecha_parenteses>", "<simb_ponto_virgula>", NULL}},
+        {"<mais_fatores>", {"<simb_subtracao>", "<simb_soma>", "<THEN>", "<DO>", "<fecha_parenteses>", "<simb_ponto_virgula>", NULL}},
+        {"<condicao>", {"<THEN>", "<DO>", NULL}},
+        {"<relacional>", {"<simb_subtracao>", "<simb_soma>", "<identificador>", "<numero>", "<abre_parenteses>", NULL}}
     };
 
 	for (int i = 0; i <= 17; i++) {
