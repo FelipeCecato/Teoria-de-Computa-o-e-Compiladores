@@ -18,7 +18,7 @@
 #define missing_value 3 //funcionando
 #define missing_semicolon 4 //funciona
 #define missing_atrib_symbol 5 // funciona
-#define missing_ident 6 // nao funciona no comando
+#define missing_ident 6 // funciona
 #define missing_END 7
 #define missing_THEN 8 //funcionando
 #define missing_DO 9 //funcionando
