@@ -17,8 +17,8 @@
 #define missing_equal_symbol 2 //funcionando
 #define missing_value 3 //funcionando
 #define missing_semicolon 4 //falhando em comando e mais_cmd e procedure
-#define missing_atrib_symbol 5
-#define missing_ident 6 // funciona
+#define missing_atrib_symbol 5 // funciona
+#define missing_ident 6 // nao funciona no comando
 #define missing_END 7
 #define missing_THEN 8 //funcionando
 #define missing_DO 9 //funcionando
@@ -117,6 +117,7 @@ void mais_const(char **token, char *classe, FILE *source_file, int *linha,  Link
 
 		erro(missing_ident, token, classe, source_file, linha, simb_sincr,pilhaRegras);
 		if(!strcmp(classe, "<simb_ponto_virgula>")) {
+			desempilharRegra("mais_const", pilhaRegras);
 			return;
 		}
 		mais_const(token, classe, source_file, linha, simb_sincr, pilhaRegras);
@@ -171,6 +172,7 @@ void mais_var(char **token, char *classe, FILE *source_file, int *linha,  Linked
 
 		erro(missing_ident, token, classe, source_file, linha, simb_sincr,pilhaRegras);
 		if(!strcmp(classe, "<simb_ponto_virgula>")) {
+			desempilharRegra("mais_var", pilhaRegras);
 			return;
 		}
 		mais_var(token, classe, source_file, linha, simb_sincr, pilhaRegras);
@@ -322,6 +324,8 @@ void condicao(char **token, char *classe, FILE *source_file, int *linha,  Linked
 	if(!strcmp(classe, "<THEN>") || !strcmp(classe, "<DO>")) {
 
 		erro(missing_condition, token, classe, source_file, linha, simb_sincr,pilhaRegras);
+		desempilharRegra("condicao", pilhaRegras);
+		desempilharRegra("relacional", pilhaRegras);
 		return;
 		
 	}
@@ -379,14 +383,22 @@ void comando(char **token, char *classe, FILE *source_file, int *linha,  LinkedL
 
 		obter_token(token, classe, source_file, linha);
 		if(!strcmp(classe, "<simb_atribuicao>")) {
-
 			obter_token(token, classe, source_file, linha);
 			expressao(token, classe, source_file, linha, simb_sincr, pilhaRegras);
 
 		}else {
 
-			erro(missing_atrib_symbol, token, classe, source_file, linha, simb_sincr,pilhaRegras);
-
+			// desempilharRegra("comando", pilhaRegras);
+			// printList(simb_sincr);
+			if(pilhaRegras[2] == 1) {
+				desempilharRegra("declaracao", pilhaRegras);
+				gerarSimSincr(pilhaRegras, simb_sincr);
+				erro(missing_atrib_symbol, token, classe, source_file, linha, simb_sincr, pilhaRegras);
+				empilharRegra("declaracao", pilhaRegras);
+				gerarSimSincr(pilhaRegras, simb_sincr);
+			}else {
+				erro(missing_atrib_symbol, token, classe, source_file, linha, simb_sincr, pilhaRegras);
+			}
 		}
 
 	}else if(!strcmp(classe, "<CALL>")) {
@@ -467,8 +479,8 @@ void mais_cmd(char **token, char *classe, FILE *source_file, int *linha,  Linked
 		comando(token, classe, source_file, linha, simb_sincr, pilhaRegras);	
 		mais_cmd(token, classe, source_file, linha, simb_sincr, pilhaRegras);	
 
-	}else if(!strcmp(classe, "<END>")){
-
+	}else if(!strcmp(classe, "<END>")) {
+		desempilharRegra("mais_cmd", pilhaRegras);
 		return;
 		
 	}else {
@@ -525,26 +537,23 @@ void procedimento(char **token, char *classe, FILE *source_file, int *linha,  Li
 		}else {
 
 			erro(missing_ident, token, classe, source_file, linha, simb_sincr,pilhaRegras);
+			
+			constante(token, classe, source_file, linha, simb_sincr, pilhaRegras);
+			variavel(token, classe, source_file, linha, simb_sincr, pilhaRegras);
+			procedimento(token, classe, source_file, linha, simb_sincr, pilhaRegras);
+			comando(token, classe, source_file, linha, simb_sincr, pilhaRegras);
+
 			if(!strcmp(classe, "<simb_ponto_virgula>")) {
 
-				analisa_procedimento(token, classe, source_file, linha, simb_sincr, pilhaRegras);
+				obter_token(token, classe, source_file, linha);
+				procedimento(token, classe, source_file, linha, simb_sincr, pilhaRegras);
 
-				if(!strcmp(classe, "<simb_ponto_virgula>")) {
+			}else {
 
-					obter_token(token, classe, source_file, linha);
-					procedimento(token, classe, source_file, linha, simb_sincr, pilhaRegras);
-
-				}else {
-
-					erro(missing_semicolon, token, classe, source_file, linha, simb_sincr,pilhaRegras);
-
-				}
+				erro(missing_semicolon, token, classe, source_file, linha, simb_sincr,pilhaRegras);
 
 			}
-
-			
 		}
-
 	} 
 
 	desempilharRegra("procedimento", pilhaRegras);
@@ -626,8 +635,10 @@ void erro(int codigo, char **token, char *classe, FILE *source_file, int *linha,
 
 	printError(codigo, token, classe, source_file, linha, simb_sincr, pilhaRegras);
 
-	while(!containsElement(simb_sincr, classe)) 
+	// printf("token: %s	classe:	%s", *token, classe);
+	while(!containsElement(simb_sincr, classe)) {
 		obter_token(token, classe, source_file, linha);
+	}
 
 }
 
@@ -732,7 +743,7 @@ void gerarSimSincr(int *pilhaRegras,  LinkedList *simb_sincr ) {
 	for (int i = 0; i <= 17; i++) {
 
 		//se a regra estiver empilhada, adiciona os seguidores dela ao conjunto de simbolos de sincronismo
-		if(pilhaRegras[i]) {
+		if(pilhaRegras[i] == 1) {
 
 			for (int j = 0; followSets[i].followers[j] != NULL; j++) 
 				insertElement(simb_sincr, followSets[i].followers[j]);
