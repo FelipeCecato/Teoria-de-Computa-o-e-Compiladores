@@ -1,17 +1,17 @@
-{ Outro programa de exemplo em PL/0 }
+{ Outro programa de exemplo em PL/0 
 
 
 CONST
-  max = 3, min = 1;
+  max = 3,  = 1;
 
 VAR
-  i, sum, temp;
+  i, sum, ;
 
-PROCEDURE CalculateSum;
+PROCEDURE ;
 BEGIN
   sum := 0;
-  i := min;
-  WHILE i <= max DO 
+  i := 
+  WHILE i <= max 
   BEGIN
     sum := sum + i;
     i := i + 1
@@ -20,14 +20,14 @@ END;
 
 BEGIN
   sum := 0;
-  temp := max - min;
+  temp :=  - ;
   CALL CalculateSum;
-  IF sum >= temp THEN
+  IF sum >=  THEN
     BEGIN
-      i := 10;
-      WHILE DO
+      i  10;
+      WHILE i < sum*2 DO
       BEGIN
-        sum := sum + i;
+        sum := sum + i
         i := i - 1
       END
     END

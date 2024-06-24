@@ -13,24 +13,21 @@
 #define MAX_CLASSE_LENGHT 32
 
 //códigos de erro
-#define unexpected_code 1 //funcionando
-#define missing_equal_symbol 2 //funcionando
-#define missing_value 3 //funcionando
-#define missing_semicolon 4 //funciona
-#define missing_atrib_symbol 5 // funciona
-#define missing_ident 6 // funciona
+#define unexpected_code 1 
+#define missing_equal_symbol 2 
+#define missing_value 3 
+#define missing_semicolon 4 
+#define missing_atrib_symbol 5 
+#define missing_ident 6 
 #define missing_END 7
-#define missing_THEN 8 //funcionando
-#define missing_DO 9 //funcionando
-#define missing_ODD 10 //funcionando
-#define missing_expression 11 // funciona
-#define missing_close_brackets 12 // funciona
-#define missing_relational_op 13 //funcionando
-#define missing_condition 14 //funcionando
-#define unexpected_ODD 15 //funcionando
-// Conferir se abrir parenteses e nao fechar da erro
-// Call sem ponto-virgula da problema
-
+#define missing_THEN 8 
+#define missing_DO 9 
+#define missing_ODD 10 
+#define missing_expression 11 
+#define missing_close_brackets 12 
+#define missing_relational_op 13 
+#define missing_condition 14 
+#define unexpected_ODD 15 
 
 //index de cada regra no vetor "pilhaRegras"
 #define programa_index 0
@@ -388,8 +385,6 @@ void comando(char **token, char *classe, FILE *source_file, int *linha,  LinkedL
 
 		}else {
 
-			// desempilharRegra("comando", pilhaRegras);
-			// printList(simb_sincr);
 			if(pilhaRegras[2] == 1) {
 				desempilharRegra("declaracao", pilhaRegras);
 				gerarSimSincr(pilhaRegras, simb_sincr);
@@ -638,7 +633,6 @@ void erro(int codigo, char **token, char *classe, FILE *source_file, int *linha,
 
 	printError(codigo, token, classe, source_file, linha, simb_sincr, pilhaRegras);
 
-	// printf("token: %s	classe:	%s", *token, classe);
 	while(!containsElement(simb_sincr, classe)) {
 		obter_token(token, classe, source_file, linha);
 	}
